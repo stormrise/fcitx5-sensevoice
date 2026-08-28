@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fcitx5 SenseVoice</string>
+    <string name="voice_input">中文语音输入</string>
+    <string name="settings_title">语音输入设置</string>
+    <string name="settings_description">设置会自动保存，并在下次打开语音输入面板时生效。</string>
+    <string name="recognition_section">识别</string>
+    <string name="recognition_language">识别语言</string>
+    <string name="recognition_language_description">自动识别或强制指定 SenseVoice 语言</string>
+    <string name="use_itn">智能格式化</string>
+    <string name="use_itn_description">将口述数字等内容转换为更自然的书写格式</string>
+    <string name="vad_section">语音检测</string>
+    <string name="vad_sensitivity">收音灵敏度</string>
+    <string name="vad_sensitivity_description">越灵敏越容易捕获轻声，也更容易受到环境噪音影响</string>
+    <string name="endpoint_silence">停顿结束时长</string>
+    <string name="endpoint_silence_description">持续静音达到该时长后识别并输入当前语音片段</string>
+    <string name="permission_section">麦克风</string>
+    <string name="permission_granted">已授予麦克风权限，录音只在设备本地处理。</string>
+    <string name="reset_defaults">恢复默认设置</string>
+    <string name="permission_explanation">Fcitx5 SenseVoice 需要麦克风权限才能在设备本地采集语音。录音不会上传。</string>
+    <string name="grant_permission">授予麦克风权限</string>
+    <string name="permission_denied">未授予麦克风权限。请返回输入法后重试。</string>
+    <string name="status_permission_required">需要麦克风权限才能使用语音输入</string>
+    <string name="status_ready">如要开始，请点按麦克风</string>
+    <string name="status_starting">正在启动麦克风…</string>
+    <string name="status_listening">正在聆听…</string>
+    <string name="status_stopping">正在停止录音…</string>
+    <string name="status_cancelled">已取消录音</string>
+    <string name="status_model_initializing">正在加载本地 SenseVoice 模型…</string>
+    <string name="status_processing">正在离线识别…</string>
+    <string name="status_result_not_committed">输入框已失效，识别结果未输入</string>
+    <string name="status_empty_result">未识别到语音</string>
+    <string name="status_asr_init_failed">SenseVoice 初始化失败：%1$s</string>
+    <string name="status_asr_failed">语音识别失败：%1$s</string>
+    <string name="status_asr_unavailable">语音识别暂不可用，请重试</string>
+    <string name="status_recording_failed">录音失败：%1$s</string>
+    <string name="start_recording">开始录音</string>
+    <string name="stop_recording">停止录音</string>
+    <string name="cancel_recording">取消</string>
+    <string name="microphone_busy">语音识别处理中</string>
+    <string name="return_to_previous_input_method">返回原来的输入法</string>
+    <string name="delete_previous_character">删除上一个字符</string>
+    <string name="retry">重试</string>
+</resources>

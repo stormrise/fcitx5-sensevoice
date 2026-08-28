@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="voice_surface">#111318</color>
+    <color name="voice_text_primary">#E2E2E6</color>
+    <color name="voice_text_secondary">#C4C6CA</color>
+    <color name="voice_icon">#C4C6CA</color>
+    <color name="voice_control_container">#292E36</color>
+    <color name="voice_control_ripple">#33A8C7FA</color>
+    <color name="voice_mic_idle">#A8C7FA</color>
+    <color name="voice_mic_recording">#F2B8B5</color>
+    <color name="voice_mic_disabled">#303238</color>
+    <color name="voice_mic_disabled_content">#8E918F</color>
+    <color name="voice_wave_idle">#2E5D9F</color>
+    <color name="voice_wave_recording">#8C4A46</color>
+    <color name="voice_wave_disabled">#5D605F</color>
+</resources>

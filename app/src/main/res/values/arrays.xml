@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recognition_language_labels">
+        <item>自动识别</item>
+        <item>普通话</item>
+        <item>粤语</item>
+        <item>英语</item>
+        <item>日语</item>
+        <item>韩语</item>
+    </string-array>
+
+    <string-array name="vad_sensitivity_labels">
+        <item>灵敏</item>
+        <item>均衡（默认）</item>
+        <item>稳健</item>
+    </string-array>
+
+    <string-array name="endpoint_silence_labels">
+        <item>0.5 秒</item>
+        <item>0.7 秒（默认）</item>
+        <item>1.0 秒</item>
+        <item>1.5 秒</item>
+    </string-array>
+</resources>

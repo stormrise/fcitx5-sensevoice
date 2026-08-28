@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:background="@color/voice_surface"
+             android:minHeight="312dp">
+
+    <ImageButton
+            android:id="@+id/back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="start|top"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/icon_button_background"
+            android:contentDescription="@string/return_to_previous_input_method"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back"/>
+
+    <ImageButton
+            android:id="@+id/delete"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/icon_button_background"
+            android:contentDescription="@string/delete_previous_character"
+            android:padding="12dp"
+            android:src="@drawable/ic_backspace"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="72dp"
+            android:paddingEnd="72dp">
+
+        <FrameLayout
+                android:layout_width="144dp"
+                android:layout_height="96dp">
+
+            <com.fcitx5sensevoice.VoiceWaveView
+                    android:id="@+id/voice_wave"
+                    android:layout_width="144dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"/>
+
+            <ImageButton
+                    android:id="@+id/microphone"
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/microphone_background_disabled"
+                    android:contentDescription="@string/microphone_busy"
+                    android:elevation="6dp"
+                    android:padding="24dp"
+                    android:src="@drawable/ic_microphone"
+                    android:tint="@color/voice_mic_disabled_content"/>
+        </FrameLayout>
+
+        <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:ellipsize="end"
+                android:fontFamily="sans"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:text="@string/status_model_initializing"
+                android:textColor="@color/voice_text_secondary"
+                android:textSize="15sp"/>
+    </LinearLayout>
+
+</FrameLayout>

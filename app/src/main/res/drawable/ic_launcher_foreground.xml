@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="108dp"
+        android:height="108dp"
+        android:viewportWidth="108"
+        android:viewportHeight="108">
+    <!-- Original penguin-inspired silhouette; no upstream artwork is embedded. -->
+    <path
+            android:fillColor="#152238"
+            android:pathData="M54,19C40,19 31,33 31,52C31,71 40,84 54,84C68,84 77,71 77,52C77,33 68,19 54,19z"/>
+    <path
+            android:fillColor="#F7FAFF"
+            android:pathData="M54,37C44,37 38,48 39,62C40,75 46,80 54,80C62,80 68,75 69,62C70,48 64,37 54,37z"/>
+    <path
+            android:fillColor="#F7FAFF"
+            android:pathData="M42,29a6,8 0,1 0,12 0a6,8 0,1 0,-12 0M54,29a6,8 0,1 0,12 0a6,8 0,1 0,-12 0"/>
+    <path
+            android:fillColor="#152238"
+            android:pathData="M48,28a2.2,3.2 0,1 0,4.4 0a2.2,3.2 0,1 0,-4.4 0M56,28a2.2,3.2 0,1 0,4.4 0a2.2,3.2 0,1 0,-4.4 0"/>
+    <path
+            android:fillColor="#F5A623"
+            android:pathData="M47,37L54,33L61,37L54,43z"/>
+    <path
+            android:pathData="M39,45C34,49 34,56 39,60M69,45C74,49 74,56 69,60"
+            android:strokeColor="#8ADDF6"
+            android:strokeLineCap="round"
+            android:strokeWidth="2.5"/>
+    <path
+            android:fillColor="#2CB8E8"
+            android:pathData="M54,41a12,12 0,1 0,0 24a12,12 0,1 0,0 -24"/>
+    <path
+            android:fillColor="#FFFFFFFF"
+            android:pathData="M54,56C56.2,56 58,54.2 58,52V47C58,44.8 56.2,43 54,43C51.8,43 50,44.8 50,47V52C50,54.2 51.8,56 54,56z"/>
+    <path
+            android:pathData="M47.5,52C47.5,55.6 50.4,58.5 54,58.5C57.6,58.5 60.5,55.6 60.5,52M54,58.5L54,62"
+            android:strokeColor="#FFFFFFFF"
+            android:strokeLineCap="round"
+            android:strokeWidth="2"/>
+    <path
+            android:fillColor="#0E386B"
+            android:pathData="M25,65H83C85.2,65 87,66.8 87,69V84C87,86.2 85.2,88 83,88H25C22.8,88 21,86.2 21,84V69C21,66.8 22.8,65 25,65z"/>
+    <path
+            android:fillColor="#F7FAFF"
+            android:pathData="M26,63H82C84.2,63 86,64.8 86,67V82C86,84.2 84.2,86 82,86H26C23.8,86 22,84.2 22,82V67C22,64.8 23.8,63 26,63z"/>
+    <path
+            android:fillColor="#A8C7FA"
+            android:pathData="M27,68h7v5h-7zM37,68h7v5h-7zM47,68h7v5h-7zM57,68h7v5h-7zM67,68h7v5h-7zM77,68h4v5h-4zM29,76h7v5h-7zM39,76h7v5h-7zM49,76h21v5H49zM73,76h8v5h-8z"/>
+</vector>

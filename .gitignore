@@ -1,0 +1,29 @@
+.gradle/
+.idea/
+.kotlin/
+build/
+**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.iml
+.DS_Store
+
+# Release binaries and signing material must be handled outside Git.
+*.apk
+*.aab
+*.jks
+*.keystore
+keystore.properties
+
+# Reproducibly downloaded third-party build inputs are intentionally untracked.
+models/
+app/src/main/assets/models/
+app/libs/
+local-deps/
+
+# Local engineering notes; keep on the development machine only.
+docs/progress.md
+docs/toolchain.md
+docs/upstream-notes.md
