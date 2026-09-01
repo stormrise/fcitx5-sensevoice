@@ -33,9 +33,6 @@ jobs:
           validate-wrappers: true
           cache-provider: basic
 
-      - name: Install Android SDK packages
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
-
       - name: Prepare pinned local ASR inputs
         run: ./scripts/prepare-local-asr.sh
 

@@ -60,23 +60,22 @@ Use JBR 25.0.2 as the Gradle JVM in IntelliJ IDEA and for command-line builds.
 
 ## Prepare fixed local ASR dependencies
 
-The AAR, models, and tokens are deliberately not tracked in Git. Review [third-party terms](THIRD_PARTY_NOTICES.md), then prepare the exact pinned artifacts before building:
+Gradle resolves sherpa-onnx `v1.13.6` from [JitPack](https://k2-fsa.github.io/sherpa/onnx/java-api/anroid-java.html) at build time. Models and tokens are deliberately not tracked in Git. Review [third-party terms](THIRD_PARTY_NOTICES.md), then prepare the exact pinned model artifacts before building:
 
 ```bash
 ./scripts/prepare-local-asr.sh
 ```
 
-The script downloads only local build inputs and verifies all hashes before copying them into ignored directories:
+The script downloads only local model inputs and verifies all hashes before copying them into ignored directories:
 
 | Artifact | Pinned version | SHA-256 |
 |---|---|---|
-| sherpa-onnx Android AAR | `v1.13.6` | `0012d9a28f15bd6fb966b62b70a75da3990512fdccce28b83098248ce4be1698` |
 | SenseVoice archive | `2025-09-09 INT8` | `7305f7905bfcf77fa0b39388a313f3da35c68d971661a65475b56fb2162c8e63` |
 | `model.int8.onnx` | `2025-09-09 INT8` | `12ca1a2ae7ecf3e0019ef2822307ee0b5cadc9196569e379b4c4026f8205276d` |
 | `tokens.txt` | `2025-09-09` | `f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc` |
 | Silero VAD | `silero_vad.onnx` | `9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6` |
 
-Version status was checked against the official upstream releases on 2026-08-28. [`v1.13.6`](https://github.com/k2-fsa/sherpa-onnx/releases/tag/v1.13.6) is the newest stable semantic sherpa-onnx release with a standard Android AAR. The app uses sherpa-onnx's newest dated standard CPU INT8 SenseVoice-format archive, `2025-09-09`. Its model is the Apache-2.0 [ASLP-lab WSYue-ASR `sensevoice_small_yue`](https://huggingface.co/ASLP-lab/WSYue-ASR) Cantonese fine-tune, not a newer release of the original FunAudioLLM SenseVoiceSmall checkpoint. Because these are derived weights, all exposed recognition languages require device regression testing when the model is updated.
+Version status was checked against the official upstream releases on 2026-08-28. [`v1.13.6`](https://github.com/k2-fsa/sherpa-onnx/releases/tag/v1.13.6) is the newest stable semantic sherpa-onnx release. The app uses sherpa-onnx's newest dated standard CPU INT8 SenseVoice-format archive, `2025-09-09`. Its model is the Apache-2.0 [ASLP-lab WSYue-ASR `sensevoice_small_yue`](https://huggingface.co/ASLP-lab/WSYue-ASR) Cantonese fine-tune, not a newer release of the original FunAudioLLM SenseVoiceSmall checkpoint. Because these are derived weights, all exposed recognition languages require device regression testing when the model is updated.
 
 ## Build
 

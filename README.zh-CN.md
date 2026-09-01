@@ -60,23 +60,22 @@ VoiceInputMethodService（主线程：生命周期、界面、InputConnection）
 
 ## 准备固定版本的本地 ASR 依赖
 
-AAR、模型和 tokens 不提交到 Git。请先阅读[第三方条款](THIRD_PARTY_NOTICES.md)，再运行：
+Gradle 会在构建时从 [JitPack](https://k2-fsa.github.io/sherpa/onnx/java-api/anroid-java.html) 解析 sherpa-onnx `v1.13.6`。模型和 tokens 不提交到 Git。请先阅读[第三方条款](THIRD_PARTY_NOTICES.md)，再准备固定版本的模型文件：
 
 ```bash
 ./scripts/prepare-local-asr.sh
 ```
 
-脚本只下载本地构建输入，并在复制到忽略目录前校验全部哈希：
+脚本只下载本地模型输入，并在复制到忽略目录前校验全部哈希：
 
 | 文件 | 固定版本 | SHA-256 |
 |---|---|---|
-| sherpa-onnx Android AAR | `v1.13.6` | `0012d9a28f15bd6fb966b62b70a75da3990512fdccce28b83098248ce4be1698` |
 | SenseVoice 归档 | `2025-09-09 INT8` | `7305f7905bfcf77fa0b39388a313f3da35c68d971661a65475b56fb2162c8e63` |
 | `model.int8.onnx` | `2025-09-09 INT8` | `12ca1a2ae7ecf3e0019ef2822307ee0b5cadc9196569e379b4c4026f8205276d` |
 | `tokens.txt` | `2025-09-09` | `f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc` |
 | Silero VAD | `silero_vad.onnx` | `9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6` |
 
-已于 2026-08-28 核对官方上游：[`v1.13.6`](https://github.com/k2-fsa/sherpa-onnx/releases/tag/v1.13.6) 是带标准 Android AAR 的最新 sherpa-onnx 稳定语义版本。本应用使用 sherpa-onnx 当前日期最新的标准 CPU INT8 SenseVoice 格式归档 `2025-09-09`。其中的模型是 Apache-2.0 的 [ASLP-lab WSYue-ASR `sensevoice_small_yue`](https://huggingface.co/ASLP-lab/WSYue-ASR) 粤语微调权重，并非 FunAudioLLM 原始 SenseVoiceSmall checkpoint 的新版。由于当前使用派生权重，每次更新模型后都必须对所有开放的识别语言做真机回归测试。
+已于 2026-08-28 核对官方上游：[`v1.13.6`](https://github.com/k2-fsa/sherpa-onnx/releases/tag/v1.13.6) 是最新 sherpa-onnx 稳定语义版本。本应用使用 sherpa-onnx 当前日期最新的标准 CPU INT8 SenseVoice 格式归档 `2025-09-09`。其中的模型是 Apache-2.0 的 [ASLP-lab WSYue-ASR `sensevoice_small_yue`](https://huggingface.co/ASLP-lab/WSYue-ASR) 粤语微调权重，并非 FunAudioLLM 原始 SenseVoiceSmall checkpoint 的新版。由于当前使用派生权重，每次更新模型后都必须对所有开放的识别语言做真机回归测试。
 
 ## 构建
 

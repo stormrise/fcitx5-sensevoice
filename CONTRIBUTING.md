@@ -6,13 +6,13 @@ Thanks for improving Fcitx5 SenseVoice. Keep changes focused and preserve the pr
 
 1. Install JBR/JDK 25, Android SDK platform 36, and Build Tools 36.0.0.
 2. Point `JAVA_HOME` and `ANDROID_SDK_ROOT` at those installations.
-3. Download the pinned local build inputs:
+3. Download the pinned local model files. Gradle resolves sherpa-onnx from JitPack at build time:
 
    ```bash
    ./scripts/prepare-local-asr.sh
    ```
 
-   Running this script downloads third-party artifacts under their own terms. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) first.
+   Running this script downloads third-party model artifacts under their own terms. Read [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) first.
 
 4. Validate the project:
 
@@ -33,6 +33,6 @@ Use an `arm64-v8a` Android device for IME behavior and speech testing. Follow [`
 
 ## Files that must not be committed
 
-Do not commit models, tokens, AARs, APKs, AABs, signing material, local SDK paths, captured audio, or build output. The preparation script must remain the reproducible source of local ASR dependencies.
+Do not commit models, tokens, APKs, AABs, signing material, local SDK paths, captured audio, or build output. The preparation script must remain the reproducible source of local model files.
 
 Contributions are submitted under the repository's [Apache License 2.0](LICENSE), as described by Section 5 of that license. Third-party contributions must retain their own notices and be license-compatible.

@@ -45,6 +45,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(files("libs/sherpa-onnx-1.13.6.aar"))
+    implementation("com.github.k2-fsa.sherpa-onnx:sherpa-onnx:v1.13.6")
     testImplementation("junit:junit:4.13.2")
 }

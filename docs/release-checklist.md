@@ -6,8 +6,8 @@ Source publication and APK publication have different legal and operational gate
 
 - [x] Original source is licensed under Apache-2.0.
 - [x] `NOTICE`, third-party notices, privacy, security, and contribution guidance are present.
-- [x] Models, tokens, AARs, APKs, signing files, local paths, and build output are ignored.
-- [x] Local dependencies are pinned by URL, version, and SHA-256.
+- [x] Models, tokens, APKs, signing files, local paths, and build output are ignored.
+- [x] Model files are pinned by URL, version, and SHA-256; sherpa-onnx is resolved from JitPack at `v1.13.6`.
 - [x] CI builds and tests but does not upload APK artifacts.
 - [x] Initialize Git, inspect the exact staged file list, and scan it for secrets and machine-specific paths.
 - [ ] Create the GitHub repository, enable private vulnerability reporting, and configure default-branch protection.

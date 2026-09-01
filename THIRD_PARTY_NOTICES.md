@@ -2,7 +2,7 @@
 
 The Apache License 2.0 in [`LICENSE`](LICENSE) covers this repository's original source and documentation. It does **not** relicense third-party runtimes, models, model weights, names, or marks.
 
-The binary inputs below are downloaded by `scripts/prepare-local-asr.sh` into ignored paths. They are not part of the Git source distribution.
+The model files below are downloaded by `scripts/prepare-local-asr.sh` into ignored paths. The sherpa-onnx Android AAR is resolved by Gradle from JitPack (`com.github.k2-fsa.sherpa-onnx:sherpa-onnx:v1.13.6`), which republishes the official GitHub release AAR. These binaries are not part of the Git source distribution.
 
 ## Dependency summary
 
@@ -14,7 +14,7 @@ The binary inputs below are downloaded by `scripts/prepare-local-asr.sh` into ig
 | [SenseVoice source](https://github.com/FunAudioLLM/SenseVoice) | Upstream source only | MIT | Copyright © 2025 FunASR. The source-code license does not determine the model-weight license. |
 | SenseVoice-derived WSYue model weights and tokens | sherpa-onnx conversion dated `2025-09-09` | Apache-2.0 on the source model card | Converted from `ASLP-lab/WSYue-ASR/sensevoice_small_yue`. The sherpa archive itself contains no license file, so preserve the source and model attribution when redistributing it. |
 
-Exact artifact URLs and SHA-256 values are recorded in the preparation script and in [`README.md`](README.md).
+Exact model URLs and SHA-256 values are recorded in the preparation script and in [`README.md`](README.md).
 
 ## SenseVoice-derived WSYue model weights
 
