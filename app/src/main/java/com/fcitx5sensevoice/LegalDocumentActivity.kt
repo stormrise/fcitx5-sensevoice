@@ -7,7 +7,7 @@ import android.widget.TextView
 /**
  * Displays bundled legal and attribution documents from assets.
  *
- * @author Lingxiao Li （李凌霄）
+ * @author stormrise
  * @date 2026/09/29
  */
 class LegalDocumentActivity : Activity() {

@@ -178,7 +178,7 @@ Upload `app/build/outputs/bundle/release/app-release.aab`. Complete the manual d
 
 ## License
 
-Original source and documentation are licensed under the [Apache License 2.0](LICENSE), copyright 2026 Lingxiao Li. Third-party runtimes and models are not relicensed; see [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+Original source and documentation are licensed under the [Apache License 2.0](LICENSE), copyright 2026 stormrise. Third-party runtimes and models are not relicensed; see [`NOTICE`](NOTICE) and [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 The launcher icon uses original vector artwork. Product names and marks belong to their respective owners; Apache-2.0 grants no trademark rights.
 

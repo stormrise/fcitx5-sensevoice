@@ -29,3 +29,6 @@ local-deps/
 docs/progress.md
 docs/toolchain.md
 docs/upstream-notes.md
+
+# Software copyright registration drafts with personal identifiers (use docs/copyright.example/).
+docs/copyright/

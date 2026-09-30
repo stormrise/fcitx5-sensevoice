@@ -14,5 +14,5 @@ The app contains no analytics, advertising, telemetry, account system, cloud ASR
 The destination app, Android system services, keyboard framework, and device vendor operate under their own privacy terms. This document describes only Fcitx5 SenseVoice itself.
 
 Contact
-- Email: lingxiaoli@trip.com
+- Project home: https://github.com/stormrise/fcitx5-sensevoice
 - Security issues: https://github.com/stormrise/fcitx5-sensevoice/security/advisories/new

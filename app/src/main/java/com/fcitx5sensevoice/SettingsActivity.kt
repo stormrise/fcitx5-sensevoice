@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.content.Intent
+import android.net.Uri
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -129,6 +130,9 @@ class SettingsActivity : Activity() {
             packageInfo.versionName,
             packageInfo.longVersionCode,
         )
+        findViewById<Button>(R.id.open_github_repository).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_REPOSITORY_URL)))
+        }
         findViewById<Button>(R.id.open_privacy_policy).setOnClickListener {
             openLegalDocument(LegalDocumentActivity.DOCUMENT_PRIVACY)
         }
@@ -154,6 +158,7 @@ class SettingsActivity : Activity() {
 
     companion object {
         const val EXTRA_REQUEST_MICROPHONE_PERMISSION = "request_microphone_permission"
+        private const val GITHUB_REPOSITORY_URL = "https://github.com/stormrise/fcitx5-sensevoice"
         private const val REQUEST_MICROPHONE = 1
         private val VAD_THRESHOLDS = floatArrayOf(0.15f, AsrSettings.DEFAULT_VAD_THRESHOLD, 0.4f)
         private val ENDPOINT_SILENCE_SECONDS =

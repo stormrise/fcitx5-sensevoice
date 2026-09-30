@@ -1,6 +1,6 @@
 Third-Party Notices
 
-Original source and documentation in this app are licensed under Apache-2.0 (Copyright 2026 Lingxiao Li). Third-party runtimes, models, model weights, names, and marks are not relicensed.
+Original source and documentation in this app are licensed under Apache-2.0 (Copyright 2026 stormrise). Third-party runtimes, models, model weights, names, and marks are not relicensed.
 
 Dependency summary
 - sherpa-onnx v1.13.6 (Android AAR via JitPack): Apache-2.0

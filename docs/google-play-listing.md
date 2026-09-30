@@ -11,7 +11,7 @@ Use this document when filling in Google Play Console. Assets are generated unde
 | Field | Value |
 |---|---|
 | Track | Closed testing → Alpha |
-| Version | `0.1.0` (version code `1`) |
+| Version | `0.1.1` (version code `2`) |
 | Join on the web | https://play.google.com/apps/testing/com.fcitx5sensevoice |
 | Join on Android | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
@@ -22,11 +22,11 @@ Testers must be added in Play Console **Closed testing → Alpha → Testers** b
 | Field | Value |
 |---|---|
 | Package name | `com.fcitx5sensevoice` |
-| Version name | `0.1.0` |
-| Version code | `1` |
+| Version name | `0.1.1` |
+| Version code | `2` |
 | Default language | Chinese (Simplified) |
 | Category | Tools or Productivity |
-| Contact email | `lingxiaoli@trip.com` |
+| Contact | Configure in Play Console (not stored in this repository) |
 | Website | https://github.com/stormrise/fcitx5-sensevoice |
 | Privacy policy URL | https://github.com/stormrise/fcitx5-sensevoice/blob/main/PRIVACY.md |
 
@@ -64,14 +64,21 @@ Fcitx5 SenseVoice 是一款纯离线的 Android 语音输入法。
 • 按语音停顿分段提交，非逐字流式显示
 ```
 
+## Release notes (v0.1.1)
+
+```text
+• 提升到 Closed testing (Alpha)
+• 纯离线 SenseVoice 中文语音输入法
+• 支持普通话、粤语、英语、日语、韩语
+• 可配置收音灵敏度与停顿结束时长
+• 与 Fcitx5 Android 语音输入按钮配合使用
+```
+
 ## Release notes (v0.1.0)
 
 ```text
 • 首次公开发布
 • 纯离线 SenseVoice 中文语音输入法
-• 支持普通话、粤语、英语、日语、韩语
-• 可配置收音灵敏度与停顿结束时长
-• 与 Fcitx5 Android 语音输入按钮配合使用
 ```
 
 ## Graphics

@@ -25,7 +25,8 @@ Do not publish an APK or AAB until every item below is complete:
 - [ ] Run the full Gradle validation and the manual matrix in [`manual-test.md`](manual-test.md), including airplane mode, focus loss, gesture cancellation, and long-press deletion.
 - [ ] Inspect the final signed package: only intended permissions, `arm64-v8a` libraries, notices, model hashes, and no debug data.
 - [x] Publish SHA-256 checksums and release notes; retain a rollback copy of the signing and source revision metadata.
-- [x] Upload version code `1` to Google Play Closed testing (Alpha).
+- [x] Upload version code `1` to Google Play Internal testing.
+- [ ] Upload version code `2` to Google Play Closed testing (Alpha).
 - [x] Record Alpha tester links:
   - Web: https://play.google.com/apps/testing/com.fcitx5sensevoice
   - Android: https://play.google.com/store/apps/details?id=com.fcitx5sensevoice

@@ -180,7 +180,7 @@ adb shell ime enable com.fcitx5sensevoice/.VoiceInputMethodService
 
 ## 许可证
 
-原创源码和文档使用 [Apache License 2.0](LICENSE)，Copyright 2026 Lingxiao Li。第三方运行时和模型不会被重新许可，详见 [`NOTICE`](NOTICE) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
+原创源码和文档使用 [Apache License 2.0](LICENSE)，Copyright 2026 stormrise。第三方运行时和模型不会被重新许可，详见 [`NOTICE`](NOTICE) 与 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)。
 
 启动器图标使用原创矢量图。产品名称与标志属于各自所有者；Apache-2.0 不授予商标权。
 

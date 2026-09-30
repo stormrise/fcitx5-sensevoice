@@ -21,7 +21,7 @@ keytool -genkeypair -v \
     -validity 10000 \
     -storepass "$store_password" \
     -keypass "$key_password" \
-    -dname "CN=Fcitx5 SenseVoice, OU=Mobile, O=Lingxiao Li, L=Unknown, ST=Unknown, C=CN"
+    -dname "CN=Fcitx5 SenseVoice, OU=Mobile, O=stormrise, L=Unknown, ST=Unknown, C=CN"
 
 cat >"$properties" <<EOF
 storeFile=upload-keystore.jks

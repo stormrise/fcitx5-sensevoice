@@ -44,7 +44,7 @@
     <string name="about_section">关于</string>
     <string name="about_version">版本 %1$s（%2$d）</string>
     <string name="about_description">纯离线语音输入法。录音仅在设备本地处理，不上传。</string>
-    <string name="about_contact">联系：lingxiaoli@trip.com</string>
+    <string name="open_github_repository">GitHub 仓库</string>
     <string name="legal_section">法律与许可</string>
     <string name="legal_privacy_title">隐私政策</string>
     <string name="legal_third_party_title">第三方声明</string>

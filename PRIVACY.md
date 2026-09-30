@@ -19,5 +19,5 @@ Changes that add networking, persistent audio/transcript storage, telemetry, or 
 
 ## Contact
 
-- Email: lingxiaoli@trip.com
+- Project home: https://github.com/stormrise/fcitx5-sensevoice
 - Security issues: https://github.com/stormrise/fcitx5-sensevoice/security/advisories/new

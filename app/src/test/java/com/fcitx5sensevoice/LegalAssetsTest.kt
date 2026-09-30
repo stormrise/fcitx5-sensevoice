@@ -9,7 +9,7 @@ import org.junit.Test
 /**
  * Ensures bundled legal assets required for public release stay present.
  *
- * @author Lingxiao Li （李凌霄）
+ * @author stormrise
  * @date 2026/09/29
  */
 class LegalAssetsTest {
