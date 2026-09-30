@@ -2,13 +2,16 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-## Internal testing
+## Closed testing（Alpha）
 
-测试员可通过网页加入内测：
+[![在 Google Play 上加入测试](docs/play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
-[![在 Google Play 上加入内测](docs/play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/internaltest/4701482031936983435)
+| 加入方式 | 链接 |
+|---|---|
+| **网页加入** | https://play.google.com/apps/testing/com.fcitx5sensevoice |
+| **Android 加入** | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-> 需先在 Play Console **Internal testing → Testers** 中添加 Google 账号；仅支持 `arm64-v8a` 设备。
+> 需先在 Play Console **Closed testing → Alpha → Testers** 中添加 Google 账号；仅支持 `arm64-v8a` 设备。
 
 基于 sherpa-onnx、Silero VAD 和 SenseVoice 的 Android 纯离线中文语音输入法。
 
@@ -173,7 +176,7 @@ adb shell ime enable com.fcitx5sensevoice/.VoiceInputMethodService
 ./scripts/verify-release-package.sh   # 检查权限与 ABI
 ```
 
-上传 `app/build/outputs/bundle/release/app-release.aab`。真机验收清单见 [`docs/manual-test.md`](docs/manual-test.md)。内测安装链接见文首 **Internal testing**。
+上传 `app/build/outputs/bundle/release/app-release.aab`。真机验收清单见 [`docs/manual-test.md`](docs/manual-test.md)。Alpha 测试链接见文首 **Closed testing（Alpha）**。
 
 ## 许可证
 

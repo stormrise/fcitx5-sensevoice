@@ -2,13 +2,16 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-## Internal testing
+## Closed testing (Alpha)
 
-Testers can join the test on the web:
+[![Get it on Google Play](docs/play-store/google-play-badge-en.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
-[![Get it on Google Play](docs/play-store/google-play-badge-en.png)](https://play.google.com/apps/internaltest/4701482031936983435)
+| Join method | Link |
+|---|---|
+| **Join on the web** | https://play.google.com/apps/testing/com.fcitx5sensevoice |
+| **Join on Android** | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-> Add tester Google accounts in Play Console **Internal testing → Testers** first. `arm64-v8a` devices only.
+> Add tester Google accounts in Play Console **Closed testing → Alpha → Testers** first. `arm64-v8a` devices only.
 
 Offline Chinese Voice IME for Android, powered by sherpa-onnx, Silero VAD, and SenseVoice.
 
@@ -171,7 +174,7 @@ Store listing copy, graphics, and upload steps live in [`docs/google-play-listin
 ./scripts/verify-release-package.sh   # permission and ABI inspection
 ```
 
-Upload `app/build/outputs/bundle/release/app-release.aab`. Complete the manual device matrix in [`docs/manual-test.md`](docs/manual-test.md) before publishing. See **Internal testing** at the top for the install link.
+Upload `app/build/outputs/bundle/release/app-release.aab`. Complete the manual device matrix in [`docs/manual-test.md`](docs/manual-test.md) before publishing. See **Closed testing (Alpha)** at the top for the install links.
 
 ## License
 

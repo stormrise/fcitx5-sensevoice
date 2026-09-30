@@ -2,21 +2,20 @@
 
 Use this document when filling in Google Play Console. Assets are generated under `docs/play-store/`.
 
-## Internal testing
+## Closed testing (Alpha)
 
-Testers can join your test on the web. Use this link:
+[![Get it on Google Play](play-store/google-play-badge-en.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
-[![Get it on Google Play](play-store/google-play-badge-en.png)](https://play.google.com/apps/internaltest/4701482031936983435)
-
-中文版徽章：[![在 Google Play 上加入内测](play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/internaltest/4701482031936983435)
+中文版徽章：[![在 Google Play 上加入测试](play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
 | Field | Value |
 |---|---|
-| Track | Internal testing |
+| Track | Closed testing → Alpha |
 | Version | `0.1.0` (version code `1`) |
-| Tester link | https://play.google.com/apps/internaltest/4701482031936983435 |
+| Join on the web | https://play.google.com/apps/testing/com.fcitx5sensevoice |
+| Join on Android | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-Testers must be added in Play Console **Internal testing → Testers** before the link works on device.
+Testers must be added in Play Console **Closed testing → Alpha → Testers** before the links work on device.
 
 ## App access
 
@@ -140,4 +139,4 @@ app/build/outputs/bundle/release/SHA256SUMS
 - [ ] Back up `upload-keystore.jks` and `keystore.properties`
 - [ ] Complete the manual matrix in `docs/manual-test.md`
 - [x] Confirm Play App Signing enrollment during first upload
-- [x] Upload `app-release.aab` to Internal testing
+- [x] Upload `app-release.aab` to Closed testing (Alpha)
