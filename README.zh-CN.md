@@ -4,14 +4,18 @@
 
 ## Closed testing（Alpha）
 
+1. 用你的 **Google 账号**加入测试邮件组：**stormrisebeta@googlegroups.com**
+2. 打开下方链接加入 Closed testing，再从 Google Play 安装
+
 [![在 Google Play 上加入测试](docs/play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
 | 加入方式 | 链接 |
 |---|---|
+| **测试邮件组** | stormrisebeta@googlegroups.com |
 | **网页加入** | https://play.google.com/apps/testing/com.fcitx5sensevoice |
 | **Android 加入** | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-> 需先在 Play Console **Closed testing → Alpha → Testers** 中添加 Google 账号；仅支持 `arm64-v8a` 设备。
+> 必须先加入 Google Group，再打开 Play 测试链接；仅支持 `arm64-v8a` 设备。
 
 基于 sherpa-onnx、Silero VAD 和 SenseVoice 的 Android 纯离线中文语音输入法。
 

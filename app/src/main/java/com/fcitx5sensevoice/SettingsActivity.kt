@@ -2,11 +2,13 @@ package com.fcitx5sensevoice
 
 import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.view.View
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Bundle
+import android.provider.Settings
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -19,17 +21,20 @@ class SettingsActivity : Activity() {
     private lateinit var itnSwitch: Switch
     private lateinit var vadSensitivitySpinner: Spinner
     private lateinit var endpointSilenceSpinner: Spinner
+    private lateinit var imeStatus: TextView
     private lateinit var permissionStatus: TextView
     private lateinit var permissionAction: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+        configureEdgeToEdge(findViewById(R.id.settings_content))
         bindViews()
         populateSpinners()
         showSettings(settingsStore.load())
         findViewById<Button>(R.id.reset_defaults).setOnClickListener { showSettings(AsrSettings.DEFAULT) }
         permissionAction.setOnClickListener { requestMicrophonePermission() }
+        findViewById<Button>(R.id.open_ime_settings).setOnClickListener { openInputMethodSettings() }
         bindAboutAndLegal()
 
         if (
@@ -43,6 +48,7 @@ class SettingsActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+        renderImeState()
         renderPermissionState()
     }
 
@@ -66,6 +72,7 @@ class SettingsActivity : Activity() {
         itnSwitch = findViewById(R.id.use_itn)
         vadSensitivitySpinner = findViewById(R.id.vad_sensitivity)
         endpointSilenceSpinner = findViewById(R.id.endpoint_silence)
+        imeStatus = findViewById(R.id.ime_status)
         permissionStatus = findViewById(R.id.permission_status)
         permissionAction = findViewById(R.id.grant_permission)
     }
@@ -110,9 +117,29 @@ class SettingsActivity : Activity() {
         return result
     }
 
+    private fun renderImeState() {
+        val enabled = isImeEnabled()
+        imeStatus.setText(if (enabled) R.string.ime_enabled else R.string.ime_disabled)
+        imeStatus.setTextColor(
+            getColor(if (enabled) R.color.settings_status_ok else R.color.settings_status_warn),
+        )
+    }
+
+    private fun isImeEnabled(): Boolean {
+        val manager = getSystemService(InputMethodManager::class.java)
+        return manager.enabledInputMethodList.any { method -> method.packageName == packageName }
+    }
+
+    private fun openInputMethodSettings() {
+        startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+    }
+
     private fun renderPermissionState() {
         val granted = hasPermission()
         permissionStatus.setText(if (granted) R.string.permission_granted else R.string.permission_explanation)
+        permissionStatus.setTextColor(
+            getColor(if (granted) R.color.settings_status_ok else R.color.settings_status_warn),
+        )
         permissionAction.visibility = if (granted) View.GONE else View.VISIBLE
     }
 

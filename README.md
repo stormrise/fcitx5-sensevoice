@@ -4,14 +4,18 @@
 
 ## Closed testing (Alpha)
 
+1. Join the tester Google Group with your **Google account**: **stormrisebeta@googlegroups.com**
+2. Open the Closed testing link below, opt in, then install from Google Play
+
 [![Get it on Google Play](docs/play-store/google-play-badge-en.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
 | Join method | Link |
 |---|---|
+| **Tester Google Group** | stormrisebeta@googlegroups.com |
 | **Join on the web** | https://play.google.com/apps/testing/com.fcitx5sensevoice |
 | **Join on Android** | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-> Add tester Google accounts in Play Console **Closed testing → Alpha → Testers** first. `arm64-v8a` devices only.
+> You must join the Google Group before the Play testing links work. `arm64-v8a` devices only.
 
 Offline Chinese Voice IME for Android, powered by sherpa-onnx, Silero VAD, and SenseVoice.
 

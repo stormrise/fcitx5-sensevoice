@@ -4,6 +4,9 @@ Use this document when filling in Google Play Console. Assets are generated unde
 
 ## Closed testing (Alpha)
 
+1. Join the tester Google Group: **stormrisebeta@googlegroups.com**
+2. Open the Closed testing link and install from Google Play
+
 [![Get it on Google Play](play-store/google-play-badge-en.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
 
 中文版徽章：[![在 Google Play 上加入测试](play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/testing/com.fcitx5sensevoice)
@@ -12,10 +15,11 @@ Use this document when filling in Google Play Console. Assets are generated unde
 |---|---|
 | Track | Closed testing → Alpha |
 | Version | `0.1.1` (version code `2`) |
+| Tester Google Group | stormrisebeta@googlegroups.com |
 | Join on the web | https://play.google.com/apps/testing/com.fcitx5sensevoice |
 | Join on Android | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
 
-Testers must be added in Play Console **Closed testing → Alpha → Testers** before the links work on device.
+Testers must join the Google Group before the Play links work on device.
 
 ## App access
 

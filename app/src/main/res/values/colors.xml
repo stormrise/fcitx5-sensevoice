@@ -13,4 +13,8 @@
     <color name="voice_wave_idle">#A8C7FA</color>
     <color name="voice_wave_recording">#F2B8B5</color>
     <color name="voice_wave_disabled">#C4C7C5</color>
+    <color name="settings_card">#FFFFFF</color>
+    <color name="settings_divider">#E3E8F0</color>
+    <color name="settings_status_ok">#146C2E</color>
+    <color name="settings_status_warn">#B3261E</color>
 </resources>

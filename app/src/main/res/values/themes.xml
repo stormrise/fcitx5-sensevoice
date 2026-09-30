@@ -9,14 +9,29 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="SettingsCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:background">@drawable/settings_card_background</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">20dp</item>
+    </style>
+
     <style name="SettingsSectionTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">32dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:fontFamily">sans-medium</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/voice_mic_idle</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="SettingsSectionTitle.First">
+        <item name="android:layout_marginTop">0dp</item>
     </style>
 
     <style name="SettingsItemTitle">
@@ -36,8 +51,53 @@
 
     <style name="SettingsSpinner">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_height">52dp</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:backgroundTint">@color/voice_mic_idle</item>
+        <item name="android:background">@drawable/settings_field_background</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+    </style>
+
+    <style name="SettingsPrimaryButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:background">@drawable/settings_primary_button</item>
+        <item name="android:fontFamily">sans-medium</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="SettingsSecondaryButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:background">@drawable/settings_secondary_button</item>
+        <item name="android:fontFamily">sans-medium</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/voice_mic_idle</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="SettingsStatusText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SettingsDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@drawable/settings_divider</item>
     </style>
 </resources>

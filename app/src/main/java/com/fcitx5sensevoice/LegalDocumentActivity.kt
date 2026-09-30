@@ -14,6 +14,7 @@ class LegalDocumentActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_legal_document)
+        configureEdgeToEdge(findViewById(R.id.legal_body))
 
         val document = intent.getStringExtra(EXTRA_DOCUMENT) ?: DOCUMENT_PRIVACY
         val definition = LegalDocuments.byId(document)

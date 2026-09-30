@@ -4,6 +4,10 @@
     <string name="voice_input">中文语音输入</string>
     <string name="settings_title">语音输入设置</string>
     <string name="settings_description">设置会自动保存，并在下次打开语音输入面板时生效。</string>
+    <string name="ime_section">输入法</string>
+    <string name="ime_enabled">已在系统中启用 Fcitx5 SenseVoice。</string>
+    <string name="ime_disabled">尚未启用。请在系统键盘设置中打开本输入法。</string>
+    <string name="open_ime_settings">打开输入法设置</string>
     <string name="recognition_section">识别</string>
     <string name="recognition_language">识别语言</string>
     <string name="recognition_language_description">自动识别或强制指定 SenseVoice 语言</string>

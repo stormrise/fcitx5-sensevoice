@@ -87,12 +87,14 @@ class VoiceInputMethodService : InputMethodService() {
 
     override fun onCreate() {
         super.onCreate()
+        window?.window?.configureDisplayCutout()
         Log.i(TAG, "IME_CREATED")
         initializeAsr()
     }
 
     override fun onCreateInputView(): View =
         layoutInflater.inflate(R.layout.input_view, null).also { view ->
+            view.applyImePanelInsets()
             statusView = view.findViewById(R.id.status)
             voiceWaveView = view.findViewById(R.id.voice_wave)
             view.findViewById<ImageButton>(R.id.back).setOnClickListener {
