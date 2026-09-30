@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LegalDocumentActivity"
+            android:exported="false"
+            android:label="@string/legal_section"
+            android:theme="@style/Theme.Fcitx5SenseVoice.Settings" />
+
         <service
             android:name=".VoiceInputMethodService"
             android:exported="true"

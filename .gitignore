@@ -10,11 +10,13 @@ captures/
 *.iml
 .DS_Store
 
-# Release binaries and signing material must be handled outside Git.
+# Release binaries and signing material stay on the local machine only.
+# Copy keystore.properties.example -> keystore.properties and run scripts/create-upload-keystore.sh
 *.apk
 *.aab
 *.jks
 *.keystore
+upload-keystore.jks
 keystore.properties
 
 # Reproducibly downloaded third-party build inputs are intentionally untracked.

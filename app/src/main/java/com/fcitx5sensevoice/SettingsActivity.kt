@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.content.Intent
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
@@ -28,6 +29,7 @@ class SettingsActivity : Activity() {
         showSettings(settingsStore.load())
         findViewById<Button>(R.id.reset_defaults).setOnClickListener { showSettings(AsrSettings.DEFAULT) }
         permissionAction.setOnClickListener { requestMicrophonePermission() }
+        bindAboutAndLegal()
 
         if (
             savedInstanceState == null &&
@@ -119,6 +121,36 @@ class SettingsActivity : Activity() {
 
     private fun hasPermission(): Boolean =
         checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+
+    private fun bindAboutAndLegal() {
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        findViewById<TextView>(R.id.about_version).text = getString(
+            R.string.about_version,
+            packageInfo.versionName,
+            packageInfo.longVersionCode,
+        )
+        findViewById<Button>(R.id.open_privacy_policy).setOnClickListener {
+            openLegalDocument(LegalDocumentActivity.DOCUMENT_PRIVACY)
+        }
+        findViewById<Button>(R.id.open_third_party_notices).setOnClickListener {
+            openLegalDocument(LegalDocumentActivity.DOCUMENT_THIRD_PARTY)
+        }
+        findViewById<Button>(R.id.open_model_attribution).setOnClickListener {
+            openLegalDocument(LegalDocumentActivity.DOCUMENT_MODEL)
+        }
+        findViewById<Button>(R.id.open_onnx_notices).setOnClickListener {
+            openLegalDocument(LegalDocumentActivity.DOCUMENT_ONNX_NOTICES)
+        }
+    }
+
+    private fun openLegalDocument(document: String) {
+        startActivity(
+            Intent(this, LegalDocumentActivity::class.java).putExtra(
+                LegalDocumentActivity.EXTRA_DOCUMENT,
+                document,
+            ),
+        )
+    }
 
     companion object {
         const val EXTRA_REQUEST_MICROPHONE_PERMISSION = "request_microphone_permission"

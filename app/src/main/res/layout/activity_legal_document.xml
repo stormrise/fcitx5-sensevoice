@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/voice_surface"
+    android:fillViewport="true">
+
+    <TextView
+        android:id="@+id/legal_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="4dp"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="40dp"
+        android:textColor="@color/voice_text_primary"
+        android:textIsSelectable="true"
+        android:textSize="14sp" />
+</ScrollView>

@@ -1,0 +1,22 @@
+SenseVoice Model Attribution
+
+This app bundles the following pinned local ASR artifacts:
+
+SenseVoice-derived model (INT8)
+- Archive: sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09.tar.bz2
+- Conversion date: 2025-09-09
+- Source model: ASLP-lab/WSYue-ASR/sensevoice_small_yue
+- Source page: https://huggingface.co/ASLP-lab/WSYue-ASR
+- License: Apache-2.0 (per the source model card)
+- Note: This is a Cantonese fine-tune of the SenseVoice architecture, not the original FunAudioLLM SenseVoiceSmall checkpoint.
+
+Pinned SHA-256 checksums
+- model.int8.onnx: 12ca1a2ae7ecf3e0019ef2822307ee0b5cadc9196569e379b4c4026f8205276d
+- tokens.txt: f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc
+- silero_vad.onnx: 9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6
+
+Silero VAD
+- Artifact: silero_vad.onnx
+- Upstream: https://github.com/snakers4/silero-vad
+- License: MIT
+- Copyright (c) 2020-present Silero Team

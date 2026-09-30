@@ -2,6 +2,14 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+## Internal testing
+
+Testers can join the test on the web:
+
+[![Get it on Google Play](docs/play-store/google-play-badge-en.png)](https://play.google.com/apps/internaltest/4701482031936983435)
+
+> Add tester Google accounts in Play Console **Internal testing → Testers** first. `arm64-v8a` devices only.
+
 Offline Chinese Voice IME for Android, powered by sherpa-onnx, Silero VAD, and SenseVoice.
 
 This project is **not a Fcitx5 addon** and does not modify Fcitx5 Android. It is an independent standard Android `InputMethodService`. Fcitx5 discovers it through `android:imeSubtypeMode="voice"` and can switch to it from its voice-input button.
@@ -152,6 +160,18 @@ The pinned SenseVoice, token, and VAD files are packaged as build-time assets fo
 - No QNN/NPU or custom dictionary.
 - Only `arm64-v8a` is packaged.
 - Public binary release still requires the documented legal, signing, package-inspection, and manual-device gates.
+
+## Google Play release
+
+Store listing copy, graphics, and upload steps live in [`docs/google-play-listing.md`](docs/google-play-listing.md). Build a signed AAB with:
+
+```bash
+./scripts/create-upload-keystore.sh   # once before the first release
+./scripts/package-release.sh
+./scripts/verify-release-package.sh   # permission and ABI inspection
+```
+
+Upload `app/build/outputs/bundle/release/app-release.aab`. Complete the manual device matrix in [`docs/manual-test.md`](docs/manual-test.md) before publishing. See **Internal testing** at the top for the install link.
 
 ## License
 

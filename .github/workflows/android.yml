@@ -36,6 +36,9 @@ jobs:
       - name: Prepare pinned local ASR inputs
         run: ./scripts/prepare-local-asr.sh
 
+      - name: Prepare legal assets
+        run: ./scripts/prepare-legal-assets.sh
+
       - name: Test, lint, and assemble
         run: ./gradlew --no-daemon test lintDebug assembleDebug assembleRelease
 

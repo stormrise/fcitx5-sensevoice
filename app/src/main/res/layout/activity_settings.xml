@@ -113,5 +113,53 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/reset_defaults" />
+
+        <TextView
+            style="@style/SettingsSectionTitle"
+            android:text="@string/about_section" />
+
+        <TextView
+            android:id="@+id/about_version"
+            style="@style/SettingsItemTitle"
+            android:text="@string/about_version" />
+
+        <TextView
+            style="@style/SettingsItemDescription"
+            android:text="@string/about_description" />
+
+        <TextView
+            style="@style/SettingsItemDescription"
+            android:text="@string/about_contact" />
+
+        <TextView
+            style="@style/SettingsSectionTitle"
+            android:text="@string/legal_section" />
+
+        <Button
+            android:id="@+id/open_privacy_policy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/open_privacy_policy" />
+
+        <Button
+            android:id="@+id/open_third_party_notices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/open_third_party_notices" />
+
+        <Button
+            android:id="@+id/open_model_attribution"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/open_model_attribution" />
+
+        <Button
+            android:id="@+id/open_onnx_notices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/open_onnx_notices" />
     </LinearLayout>
 </ScrollView>

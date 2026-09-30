@@ -2,6 +2,14 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
+## Internal testing
+
+测试员可通过网页加入内测：
+
+[![在 Google Play 上加入内测](docs/play-store/google-play-badge-zh-cn.png)](https://play.google.com/apps/internaltest/4701482031936983435)
+
+> 需先在 Play Console **Internal testing → Testers** 中添加 Google 账号；仅支持 `arm64-v8a` 设备。
+
 基于 sherpa-onnx、Silero VAD 和 SenseVoice 的 Android 纯离线中文语音输入法。
 
 本项目**不是 Fcitx5 插件**，也不会修改 Fcitx5 Android。它是一个独立的标准 Android `InputMethodService`；Fcitx5 通过 `android:imeSubtypeMode="voice"` 发现它，并可通过语音输入按钮切换到本输入法。
@@ -154,6 +162,18 @@ adb shell ime enable com.fcitx5sensevoice/.VoiceInputMethodService
 - 没有 QNN/NPU 或自定义词典。
 - 只打包 `arm64-v8a`。
 - 公开二进制发布仍需通过法律、签名、包检查和真机手工测试门禁。
+
+## Google Play 发布
+
+发布材料、商店文案和图形素材见 [`docs/google-play-listing.md`](docs/google-play-listing.md)。生成 signed AAB：
+
+```bash
+./scripts/create-upload-keystore.sh   # 首次发布前执行一次
+./scripts/package-release.sh
+./scripts/verify-release-package.sh   # 检查权限与 ABI
+```
+
+上传 `app/build/outputs/bundle/release/app-release.aab`。真机验收清单见 [`docs/manual-test.md`](docs/manual-test.md)。内测安装链接见文首 **Internal testing**。
 
 ## 许可证
 

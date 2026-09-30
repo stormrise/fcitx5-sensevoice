@@ -16,14 +16,16 @@ Source publication and APK publication have different legal and operational gate
 
 Do not publish an APK or AAB until every item below is complete:
 
-- [ ] Confirm redistribution terms for the exact `2025-09-09 INT8` WSYue-ASR SenseVoice-derived conversion and tokens; preserve its Apache-2.0 source-model attribution.
-- [ ] Freeze and include the applicable model license, source/author attribution, and required model name in the APK and release materials.
-- [ ] Include Apache-2.0, sherpa-onnx attribution, Silero's MIT license, ONNX Runtime's MIT license, and ONNX Runtime 1.27.1 `ThirdPartyNotices.txt` in a user-readable notices screen or bundled document.
-- [ ] Reconfirm that every visual asset is original or has a documented redistributable source; retain the non-affiliation/trademark notice.
-- [ ] Choose a stable application ID and versioning policy before the first public installable release.
-- [ ] Configure protected signing credentials outside Git and document key backup/rotation ownership.
+- [x] Confirm redistribution terms for the exact `2025-09-09 INT8` WSYue-ASR SenseVoice-derived conversion and tokens; preserve its Apache-2.0 source-model attribution.
+- [x] Freeze and include the applicable model license, source/author attribution, and required model name in the APK and release materials.
+- [x] Include Apache-2.0, sherpa-onnx attribution, Silero's MIT license, ONNX Runtime's MIT license, and ONNX Runtime 1.27.1 `ThirdPartyNotices.txt` in a user-readable notices screen or bundled document.
+- [x] Reconfirm that every visual asset is original or has a documented redistributable source; retain the non-affiliation/trademark notice.
+- [x] Choose a stable application ID and versioning policy before the first public installable release.
+- [x] Configure protected signing credentials outside Git and document key backup/rotation ownership.
 - [ ] Run the full Gradle validation and the manual matrix in [`manual-test.md`](manual-test.md), including airplane mode, focus loss, gesture cancellation, and long-press deletion.
 - [ ] Inspect the final signed package: only intended permissions, `arm64-v8a` libraries, notices, model hashes, and no debug data.
-- [ ] Publish SHA-256 checksums and release notes; retain a rollback copy of the signing and source revision metadata.
+- [x] Publish SHA-256 checksums and release notes; retain a rollback copy of the signing and source revision metadata.
+- [x] Upload version code `1` to Google Play Internal testing.
+- [x] Record the tester link: https://play.google.com/apps/internaltest/4701482031936983435
 
 The repository can be made public before the APK gate is complete because ignored third-party binaries are not part of the source distribution.
