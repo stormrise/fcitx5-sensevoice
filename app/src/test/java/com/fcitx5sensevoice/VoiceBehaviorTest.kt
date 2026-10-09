@@ -81,6 +81,16 @@ class VoiceBehaviorTest {
     }
 
     @Test
+    fun uiLanguageDefaultsToSystemAndAcceptsKnownCodes() {
+        assertEquals(UiLanguage.SYSTEM, UiLanguage.fromCode(null))
+        assertEquals(UiLanguage.SYSTEM, UiLanguage.fromCode("nope"))
+        assertEquals(UiLanguage.CHINESE, UiLanguage.fromCode("zh"))
+        assertEquals(UiLanguage.ENGLISH, UiLanguage.fromCode("en"))
+        assertEquals(UiLanguage.JAPANESE, UiLanguage.fromCode("ja"))
+        assertEquals(UiLanguage.KOREAN, UiLanguage.fromCode("ko"))
+    }
+
+    @Test
     fun sileroProbabilitiesProduceSpeechSegmentAfterTrailingSilence() {
         val probabilities = ArrayDeque(
             buildList {

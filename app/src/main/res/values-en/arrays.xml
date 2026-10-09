@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ui_language_labels">
+        <item>System default</item>
+        <item>中文</item>
+        <item>English</item>
+        <item>日本語</item>
+        <item>한국어</item>
+    </string-array>
+
+    <string-array name="recognition_language_labels">
+        <item>Auto detect</item>
+        <item>Mandarin</item>
+        <item>Cantonese</item>
+        <item>English</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+    </string-array>
+
+    <string-array name="vad_sensitivity_labels">
+        <item>Sensitive</item>
+        <item>Balanced (default)</item>
+        <item>Stable</item>
+    </string-array>
+
+    <string-array name="endpoint_silence_labels">
+        <item>0.5 s</item>
+        <item>0.7 s (default)</item>
+        <item>1.0 s</item>
+        <item>1.5 s</item>
+    </string-array>
+</resources>

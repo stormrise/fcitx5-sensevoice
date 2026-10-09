@@ -2,12 +2,14 @@ package com.fcitx5sensevoice
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.widget.AdapterView
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -17,6 +19,7 @@ import android.widget.TextView
 
 class SettingsActivity : Activity() {
     private val settingsStore by lazy { AppSettings(this) }
+    private lateinit var uiLanguageSpinner: Spinner
     private lateinit var languageSpinner: Spinner
     private lateinit var itnSwitch: Switch
     private lateinit var vadSensitivitySpinner: Spinner
@@ -25,6 +28,10 @@ class SettingsActivity : Activity() {
     private lateinit var permissionStatus: TextView
     private lateinit var permissionAction: Button
 
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(wrapUiLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -32,7 +39,10 @@ class SettingsActivity : Activity() {
         bindViews()
         populateSpinners()
         showSettings(settingsStore.load())
-        findViewById<Button>(R.id.reset_defaults).setOnClickListener { showSettings(AsrSettings.DEFAULT) }
+        findViewById<Button>(R.id.reset_defaults).setOnClickListener {
+            showSettings(AsrSettings.DEFAULT)
+            applyUiLanguage(UiLanguage.SYSTEM)
+        }
         permissionAction.setOnClickListener { requestMicrophonePermission() }
         findViewById<Button>(R.id.open_ime_settings).setOnClickListener { openInputMethodSettings() }
         bindAboutAndLegal()
@@ -68,6 +78,7 @@ class SettingsActivity : Activity() {
     }
 
     private fun bindViews() {
+        uiLanguageSpinner = findViewById(R.id.ui_language)
         languageSpinner = findViewById(R.id.recognition_language)
         itnSwitch = findViewById(R.id.use_itn)
         vadSensitivitySpinner = findViewById(R.id.vad_sensitivity)
@@ -78,9 +89,20 @@ class SettingsActivity : Activity() {
     }
 
     private fun populateSpinners() {
+        uiLanguageSpinner.setEntries(R.array.ui_language_labels)
         languageSpinner.setEntries(R.array.recognition_language_labels)
         vadSensitivitySpinner.setEntries(R.array.vad_sensitivity_labels)
         endpointSilenceSpinner.setEntries(R.array.endpoint_silence_labels)
+        uiLanguageSpinner.setSelection(UiLanguage.entries.indexOf(settingsStore.loadUiLanguage()))
+        uiLanguageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                applyUiLanguage(
+                    UiLanguage.entries[position.coerceIn(UiLanguage.entries.indices)],
+                )
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
     }
 
     private fun Spinner.setEntries(arrayResource: Int) {
@@ -108,6 +130,12 @@ class SettingsActivity : Activity() {
             endpointSilenceSpinner.selectedItemPosition.coerceIn(ENDPOINT_SILENCE_SECONDS.indices)
         ],
     )
+
+    private fun applyUiLanguage(language: UiLanguage) {
+        if (language == settingsStore.loadUiLanguage()) return
+        settingsStore.saveUiLanguage(language)
+        recreate()
+    }
 
     private fun FloatArray.nearestIndex(value: Float): Int {
         var result = 0

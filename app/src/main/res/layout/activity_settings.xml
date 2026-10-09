@@ -39,6 +39,20 @@
 
             <TextView
                 style="@style/SettingsSectionTitle.First"
+                android:text="@string/ui_language" />
+
+            <TextView
+                style="@style/SettingsItemDescription"
+                android:text="@string/ui_language_description" />
+
+            <Spinner
+                android:id="@+id/ui_language"
+                style="@style/SettingsSpinner" />
+
+            <View style="@style/SettingsDivider" />
+
+            <TextView
+                style="@style/SettingsSectionTitle.First"
                 android:text="@string/ime_section" />
 
             <TextView

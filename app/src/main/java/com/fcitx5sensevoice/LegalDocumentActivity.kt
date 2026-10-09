@@ -1,6 +1,7 @@
 package com.fcitx5sensevoice
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.widget.TextView
 
@@ -11,6 +12,10 @@ import android.widget.TextView
  * @date 2026/09/29
  */
 class LegalDocumentActivity : Activity() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(wrapUiLocale(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_legal_document)

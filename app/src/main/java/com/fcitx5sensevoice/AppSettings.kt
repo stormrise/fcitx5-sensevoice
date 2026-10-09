@@ -1,6 +1,35 @@
 package com.fcitx5sensevoice
 
 import android.content.Context
+import android.content.res.Configuration
+import java.util.Locale
+
+internal enum class UiLanguage(val code: String) {
+    SYSTEM("system"),
+    CHINESE("zh"),
+    ENGLISH("en"),
+    JAPANESE("ja"),
+    KOREAN("ko");
+
+    fun localeOrNull(): Locale? = when (this) {
+        SYSTEM -> null
+        CHINESE -> Locale.SIMPLIFIED_CHINESE
+        ENGLISH -> Locale.ENGLISH
+        JAPANESE -> Locale.JAPANESE
+        KOREAN -> Locale.KOREAN
+    }
+
+    companion object {
+        fun fromCode(code: String?): UiLanguage = entries.firstOrNull { it.code == code } ?: SYSTEM
+    }
+}
+
+internal fun wrapUiLocale(context: Context): Context {
+    val locale = AppSettings(context).loadUiLanguage().localeOrNull() ?: return context
+    val config = Configuration(context.resources.configuration)
+    config.setLocale(locale)
+    return context.createConfigurationContext(config)
+}
 
 internal enum class RecognitionLanguage(val code: String) {
     AUTO("auto"),
@@ -42,7 +71,14 @@ internal data class AsrSettings(
 }
 
 internal class AppSettings(context: Context) {
-    private val preferences = context.applicationContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+    private val preferences =
+        (context.applicationContext ?: context).getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+    fun loadUiLanguage(): UiLanguage = UiLanguage.fromCode(preferences.getString(KEY_UI_LANGUAGE, UiLanguage.SYSTEM.code))
+
+    fun saveUiLanguage(language: UiLanguage) {
+        preferences.edit().putString(KEY_UI_LANGUAGE, language.code).apply()
+    }
 
     fun load(): AsrSettings = AsrSettings.fromStoredValues(
         languageCode = preferences.getString(KEY_LANGUAGE, RecognitionLanguage.MANDARIN.code),
@@ -65,6 +101,7 @@ internal class AppSettings(context: Context) {
 
     private companion object {
         const val PREFERENCES_NAME = "voice_settings"
+        const val KEY_UI_LANGUAGE = "ui_language"
         const val KEY_LANGUAGE = "recognition_language"
         const val KEY_USE_ITN = "use_inverse_text_normalization"
         const val KEY_VAD_THRESHOLD = "vad_threshold"

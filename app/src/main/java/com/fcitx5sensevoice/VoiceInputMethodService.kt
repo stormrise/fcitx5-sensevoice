@@ -39,6 +39,7 @@ class VoiceInputMethodService : InputMethodService() {
     private var asrReady = false
     private var asrInitError: String? = null
     private var loadedAsrSettings: AsrSettings? = null
+    private var loadedUiLanguage: UiLanguage? = null
     private var asrInitializationGeneration = 0L
     private var inputSession = 0L
     private var recordingGeneration = 0L
@@ -92,8 +93,25 @@ class VoiceInputMethodService : InputMethodService() {
         initializeAsr()
     }
 
-    override fun onCreateInputView(): View =
-        layoutInflater.inflate(R.layout.input_view, null).also { view ->
+    override fun onCreateInputView(): View = inflateInputView()
+
+    override fun onStartInputView(info: android.view.inputmethod.EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+        val uiLanguage = AppSettings(this).loadUiLanguage()
+        if (loadedUiLanguage != uiLanguage) {
+            loadedUiLanguage = uiLanguage
+            if (::statusView.isInitialized) setInputView(inflateInputView())
+        }
+        inputSession++
+        inputViewActive = true
+        reloadAsrIfSettingsChanged()
+        if (::statusView.isInitialized && recorder.state == AudioRecorderState.IDLE && !recordingSessionActive) {
+            renderIdleState()
+        }
+    }
+
+    private fun inflateInputView(): View =
+        layoutInflater.cloneInContext(wrapUiLocale(this)).inflate(R.layout.input_view, null).also { view ->
             view.applyImePanelInsets()
             statusView = view.findViewById(R.id.status)
             voiceWaveView = view.findViewById(R.id.voice_wave)
@@ -113,16 +131,6 @@ class VoiceInputMethodService : InputMethodService() {
             }
             renderIdleState()
         }
-
-    override fun onStartInputView(info: android.view.inputmethod.EditorInfo?, restarting: Boolean) {
-        super.onStartInputView(info, restarting)
-        inputSession++
-        inputViewActive = true
-        reloadAsrIfSettingsChanged()
-        if (::statusView.isInitialized && recorder.state == AudioRecorderState.IDLE && !recordingSessionActive) {
-            renderIdleState()
-        }
-    }
 
     override fun onFinishInputView(finishingInput: Boolean) {
         inputViewActive = false

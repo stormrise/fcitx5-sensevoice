@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="ui_language_labels">
+        <item>跟随系统</item>
+        <item>中文</item>
+        <item>English</item>
+        <item>日本語</item>
+        <item>한국어</item>
+    </string-array>
+
     <string-array name="recognition_language_labels">
         <item>自动识别</item>
         <item>普通话</item>
