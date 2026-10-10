@@ -37,9 +37,28 @@
 
         <LinearLayout style="@style/SettingsCard">
 
-            <TextView
-                style="@style/SettingsSectionTitle.First"
-                android:text="@string/ui_language" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/ui_language"
+                    android:src="@drawable/ic_language" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-medium"
+                    android:text="@string/ui_language"
+                    android:textColor="@color/voice_text_primary"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <TextView
                 style="@style/SettingsItemDescription"

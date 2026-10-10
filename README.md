@@ -149,7 +149,7 @@ The voice panel supports:
 
 ## Model installation
 
-The pinned SenseVoice, token, and VAD files are packaged as build-time assets for the development APK. On first use they are copied through a staging directory into app-private storage, verified against fixed SHA-256 values, atomically installed, and marked read-only. A missing or modified file prevents ASR initialization and produces a visible error instead of falling back to a network service.
+The pinned SenseVoice, token, and VAD files live in the `sensevoice_models` install-time Play Asset Delivery pack. Debug APKs still include the same files from that pack directory. On first use they are copied through a staging directory into app-private storage, verified against fixed SHA-256 values, atomically installed, and marked read-only. A missing or modified file prevents ASR initialization and produces a visible error instead of falling back to a network service.
 
 ## Offline guarantee
 

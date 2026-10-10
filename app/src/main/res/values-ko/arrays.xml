@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ui_language_labels">
-        <item>시스템 언어</item>
-        <item>中文</item>
-        <item>English</item>
-        <item>日本語</item>
-        <item>한국어</item>
+        <item>🌐 跟随系统 / System</item>
+        <item>🇨🇳 中文</item>
+        <item>🇺🇸 English</item>
+        <item>🇯🇵 日本語</item>
+        <item>🇰🇷 한국어</item>
     </string-array>
 
     <string-array name="recognition_language_labels">
-        <item>자동 감지</item>
-        <item>중국어 표준어</item>
-        <item>광둥어</item>
-        <item>영어</item>
-        <item>일본어</item>
-        <item>한국어</item>
+        <item>🌐 자동 감지</item>
+        <item>🇨🇳 중국어 표준어</item>
+        <item>🇭🇰 광둥어</item>
+        <item>🇺🇸 영어</item>
+        <item>🇯🇵 일본어</item>
+        <item>🇰🇷 한국어</item>
     </string-array>
 
     <string-array name="vad_sensitivity_labels">

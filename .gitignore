@@ -22,6 +22,7 @@ keystore.properties
 # Reproducibly downloaded third-party build inputs are intentionally untracked.
 models/
 app/src/main/assets/models/
+sensevoice_models/src/main/assets/models/
 app/libs/
 local-deps/
 

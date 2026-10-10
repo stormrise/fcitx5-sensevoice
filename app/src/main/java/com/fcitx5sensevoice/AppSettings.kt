@@ -1,7 +1,10 @@
 package com.fcitx5sensevoice
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
+import android.os.LocaleList
 import java.util.Locale
 
 internal enum class UiLanguage(val code: String) {
@@ -24,10 +27,22 @@ internal enum class UiLanguage(val code: String) {
     }
 }
 
+internal fun persistUiLanguage(context: Context, language: UiLanguage) {
+    AppSettings(context).saveUiLanguage(language)
+    if (Build.VERSION.SDK_INT >= 33) {
+        val locales = language.localeOrNull()?.let { LocaleList(it) } ?: LocaleList.getEmptyLocaleList()
+        context.getSystemService(LocaleManager::class.java).applicationLocales = locales
+    }
+}
+
 internal fun wrapUiLocale(context: Context): Context {
+    // ponytail: API 33+ LocaleManager already owns per-app locale; wrapping fights it.
+    if (Build.VERSION.SDK_INT >= 33) return context
     val locale = AppSettings(context).loadUiLanguage().localeOrNull() ?: return context
+    Locale.setDefault(locale)
     val config = Configuration(context.resources.configuration)
-    config.setLocale(locale)
+    config.setLocales(LocaleList(locale))
+    config.setLayoutDirection(locale)
     return context.createConfigurationContext(config)
 }
 
@@ -77,7 +92,7 @@ internal class AppSettings(context: Context) {
     fun loadUiLanguage(): UiLanguage = UiLanguage.fromCode(preferences.getString(KEY_UI_LANGUAGE, UiLanguage.SYSTEM.code))
 
     fun saveUiLanguage(language: UiLanguage) {
-        preferences.edit().putString(KEY_UI_LANGUAGE, language.code).apply()
+        preferences.edit().putString(KEY_UI_LANGUAGE, language.code).commit()
     }
 
     fun load(): AsrSettings = AsrSettings.fromStoredValues(

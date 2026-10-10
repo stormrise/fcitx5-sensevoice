@@ -49,5 +49,23 @@ do
     fi
 done
 
+if unzip -l "$aab" | awk '{print $4}' | grep -q '^base/assets/models/'; then
+    printf '%s\n' "ERROR: SenseVoice models must live in the asset pack, not the base module." >&2
+    exit 1
+fi
+
+printf '\n%s\n' "SenseVoice asset pack:"
+unzip -l "$aab" | awk '/sensevoice_models\/assets\// {print $4}' | sort
+for asset in \
+    sensevoice_models/assets/models/sensevoice/model.int8.onnx \
+    sensevoice_models/assets/models/sensevoice/tokens.txt \
+    sensevoice_models/assets/models/sensevoice/silero_vad.onnx
+do
+    if ! unzip -l "$aab" | awk '{print $4}' | grep -qx "$asset"; then
+        printf 'ERROR: Missing asset pack file: %s\n' "$asset" >&2
+        exit 1
+    fi
+done
+
 printf '\n%s\n' "Release bundle checksum:"
 shasum -a 256 "$aab"

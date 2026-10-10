@@ -4,7 +4,7 @@
     <string name="voice_input">Voice input</string>
     <string name="settings_title">Voice input settings</string>
     <string name="settings_description">Changes are saved automatically and take effect the next time you open the voice panel.</string>
-    <string name="ui_language">Display language</string>
+    <string name="ui_language">界面语言 / Language</string>
     <string name="ui_language_description">Language for the settings page and voice panel, independent of recognition language</string>
     <string name="ime_section">Input method</string>
     <string name="ime_enabled">Fcitx5 SenseVoice is enabled in system keyboard settings.</string>

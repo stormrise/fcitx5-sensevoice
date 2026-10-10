@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "fcitx5-sensevoice"
 include(":app")
+include(":sensevoice_models")

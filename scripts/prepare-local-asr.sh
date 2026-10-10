@@ -8,7 +8,8 @@ extract="$cache/sensevoice-2025-09-09"
 archive="$downloads/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09.tar.bz2"
 vad="$downloads/silero_vad.onnx"
 model_source="$extract/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09"
-model_target="$root/app/src/main/assets/models/sensevoice"
+model_target="$root/sensevoice_models/src/main/assets/models/sensevoice"
+legacy_app_models="$root/app/src/main/assets/models"
 
 model_url="https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-int8-2025-09-09.tar.bz2"
 vad_url="https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/silero_vad.onnx"
@@ -80,6 +81,10 @@ fi
 verify "$model_sha256" "$model_target/model.int8.onnx"
 verify "$tokens_sha256" "$model_target/tokens.txt"
 verify "$vad_sha256" "$model_target/silero_vad.onnx"
+
+if [ -d "$legacy_app_models" ]; then
+    rm -rf "$legacy_app_models"
+fi
 
 printf '%s\n' "Prepared fixed local ASR dependencies:"
 printf '  SenseVoice model: %s\n' "$model_target/model.int8.onnx"

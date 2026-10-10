@@ -18,13 +18,19 @@ android {
         applicationId = "com.fcitx5sensevoice"
         minSdk = 28
         targetSdk = 36
-        versionCode = 4
-        versionName = "0.1.3"
+        versionCode = 5
+        versionName = "0.1.4"
 
         ndk {
             abiFilters += "arm64-v8a"
         }
     }
+
+    sourceSets.named("debug") {
+        assets.directories.add(rootProject.file("sensevoice_models/src/main/assets").path)
+    }
+
+    assetPacks += listOf(":sensevoice_models")
 
     signingConfigs {
         if (keystorePropertiesFile.exists()) {

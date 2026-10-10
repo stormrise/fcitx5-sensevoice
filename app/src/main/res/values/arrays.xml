@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ui_language_labels">
-        <item>跟随系统</item>
-        <item>中文</item>
-        <item>English</item>
-        <item>日本語</item>
-        <item>한국어</item>
+        <item>🌐 跟随系统 / System</item>
+        <item>🇨🇳 中文</item>
+        <item>🇺🇸 English</item>
+        <item>🇯🇵 日本語</item>
+        <item>🇰🇷 한국어</item>
     </string-array>
 
     <string-array name="recognition_language_labels">
-        <item>自动识别</item>
-        <item>普通话</item>
-        <item>粤语</item>
-        <item>英语</item>
-        <item>日语</item>
-        <item>韩语</item>
+        <item>🌐 自动识别</item>
+        <item>🇨🇳 普通话</item>
+        <item>🇭🇰 粤语</item>
+        <item>🇺🇸 英语</item>
+        <item>🇯🇵 日语</item>
+        <item>🇰🇷 韩语</item>
     </string-array>
 
     <string-array name="vad_sensitivity_labels">

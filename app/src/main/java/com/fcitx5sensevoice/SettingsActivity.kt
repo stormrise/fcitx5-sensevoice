@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -132,9 +133,12 @@ class SettingsActivity : Activity() {
     )
 
     private fun applyUiLanguage(language: UiLanguage) {
-        if (language == settingsStore.loadUiLanguage()) return
-        settingsStore.saveUiLanguage(language)
-        recreate()
+        val previous = settingsStore.loadUiLanguage()
+        persistUiLanguage(this, language)
+        // ponytail: API 33+ LocaleManager recreates the activity; calling recreate() here races it.
+        if (Build.VERSION.SDK_INT < 33 && language != previous) {
+            recreate()
+        }
     }
 
     private fun FloatArray.nearestIndex(value: Float): Int {

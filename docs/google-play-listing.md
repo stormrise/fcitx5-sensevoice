@@ -14,7 +14,7 @@ Use this document when filling in Google Play Console. Assets are generated unde
 | Field | Value |
 |---|---|
 | Track | Closed testing → Alpha |
-| Version | `0.1.3` (version code `4`) |
+| Version | `0.1.4` (version code `5`) |
 | Tester Google Group | stormrisebeta@googlegroups.com |
 | Join on the web | https://play.google.com/apps/testing/com.fcitx5sensevoice |
 | Join on Android | https://play.google.com/store/apps/details?id=com.fcitx5sensevoice |
@@ -26,8 +26,8 @@ Testers must join the Google Group before the Play links work on device.
 | Field | Value |
 |---|---|
 | Package name | `com.fcitx5sensevoice` |
-| Version name | `0.1.3` |
-| Version code | `4` |
+| Version name | `0.1.4` |
+| Version code | `5` |
 | Default language | Chinese (Simplified) |
 | Category | Tools or Productivity |
 | Contact | Configure in Play Console (not stored in this repository) |
@@ -66,6 +66,13 @@ Fcitx5 SenseVoice 是一款纯离线的 Android 语音输入法。
 • 仅支持 arm64-v8a 设备
 • 应用体积较大（内置离线模型）
 • 按语音停顿分段提交，非逐字流式显示
+```
+
+## Release notes (v0.1.4)
+
+```text
+• 修复设置页手动切换界面语言
+• 模型改为 Play Asset Delivery 分包，后续代码更新不必重下模型
 ```
 
 ## Release notes (v0.1.3)

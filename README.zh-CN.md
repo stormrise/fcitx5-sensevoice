@@ -149,7 +149,7 @@ adb shell ime enable com.fcitx5sensevoice/.VoiceInputMethodService
 
 ## 模型安装
 
-固定版本的 SenseVoice、tokens 和 VAD 文件作为开发 APK 的构建期 assets。首次使用时，应用先复制到私有暂存目录，校验固定 SHA-256，再原子安装并设为只读。文件缺失、损坏或哈希不符时会阻止 ASR 初始化并显示错误，不会回退到网络服务。
+固定版本的 SenseVoice、tokens 和 VAD 文件放在 `sensevoice_models` 这个 Play Asset Delivery 的 install-time 分包里。Debug APK 仍从该目录打包同一份文件。首次使用时，应用先复制到私有暂存目录，校验固定 SHA-256，再原子安装并设为只读。文件缺失、损坏或哈希不符时会阻止 ASR 初始化并显示错误，不会回退到网络服务。
 
 ## 离线与隐私
 

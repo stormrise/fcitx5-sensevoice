@@ -4,7 +4,7 @@
     <string name="voice_input">音声入力</string>
     <string name="settings_title">音声入力の設定</string>
     <string name="settings_description">変更は自動保存され、次に音声パネルを開いたときに反映されます。</string>
-    <string name="ui_language">表示言語</string>
+    <string name="ui_language">界面语言 / Language</string>
     <string name="ui_language_description">設定画面と音声パネルの表示言語です。認識言語とは別に選べます</string>
     <string name="ime_section">入力方法</string>
     <string name="ime_enabled">Fcitx5 SenseVoice はシステムのキーボード設定で有効です。</string>
