@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Voice panel height. Must match the Fcitx5 keyboard height on the same device,
+        otherwise the panel jumps when switching between the two.
+        Measure it with: adb shell dumpsys window windows | grep -A3 InputMethod
+    -->
+    <dimen name="voice_panel_height">312dp</dimen>
+</resources>

@@ -1,8 +1,8 @@
 package com.fcitx5sensevoice
 
-import android.app.Activity
-import android.graphics.Color
 import android.os.Build
+import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import android.view.View
 import android.view.Window
 import android.view.WindowInsets
@@ -57,20 +57,12 @@ fun View.applyImePanelInsets() {
 fun View.viewPadding(): PaddingValues =
     PaddingValues(paddingLeft, paddingTop, paddingRight, paddingBottom)
 
-fun Activity.configureEdgeToEdge(rootView: View) {
+// enableEdgeToEdge() handles window flags and transparent system bars on every API level,
+// so the bars keep the page background instead of the theme default.
+fun ComponentActivity.configureEdgeToEdge(rootView: View) {
+    enableEdgeToEdge()
     window.configureDisplayCutout()
-    window.statusBarColor = Color.TRANSPARENT
-    window.navigationBarColor = Color.TRANSPARENT
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        window.isNavigationBarContrastEnforced = false
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        window.setDecorFitsSystemWindows(false)
-        rootView.applySystemBarPadding(rootView.viewPadding())
-    } else {
-        @Suppress("DEPRECATION")
-        rootView.fitsSystemWindows = true
-    }
+    rootView.applySystemBarPadding(rootView.viewPadding())
 }
 
 fun Window.configureDisplayCutout() {

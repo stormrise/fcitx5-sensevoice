@@ -11,6 +11,12 @@
     <color name="voice_mic_disabled">#303238</color>
     <color name="voice_mic_disabled_content">#8E918F</color>
     <color name="voice_wave_idle">#2E5D9F</color>
-    <color name="voice_wave_recording">#8C4A46</color>
+    <color name="voice_wave_recording">#F2B8B5</color>
+    <color name="voice_sheen">#1FFFFFFF</color>
     <color name="voice_wave_disabled">#5D605F</color>
+    <color name="voice_on_accent">#003258</color>
+    <color name="settings_card">#1B1E25</color>
+    <color name="settings_divider">#3A3F47</color>
+    <color name="settings_status_ok">#8ED8A0</color>
+    <color name="settings_status_warn">#F2B8B5</color>
 </resources>

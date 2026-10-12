@@ -14,9 +14,19 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="20dp"
-        android:paddingTop="20dp"
+        android:paddingTop="8dp"
         android:paddingEnd="20dp"
         android:paddingBottom="40dp">
+
+        <ImageButton
+            android:id="@+id/settings_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="-12dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/navigate_back"
+            android:padding="12dp"
+            android:src="@drawable/ic_navigate_back" />
 
         <TextView
             android:layout_width="match_parent"
@@ -67,16 +77,67 @@
             <Spinner
                 android:id="@+id/ui_language"
                 style="@style/SettingsSpinner" />
+        </LinearLayout>
 
-            <View style="@style/SettingsDivider" />
+        <LinearLayout style="@style/SettingsCard">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/ui_theme"
+                    android:src="@drawable/ic_theme" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-medium"
+                    android:text="@string/ui_theme"
+                    android:textColor="@color/voice_text_primary"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/SettingsItemDescription"
+                android:text="@string/ui_theme_description" />
+
+            <Spinner
+                android:id="@+id/ui_theme"
+                style="@style/SettingsSpinner" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/SettingsCard">
 
             <TextView
                 style="@style/SettingsSectionTitle.First"
                 android:text="@string/ime_section" />
 
-            <TextView
-                android:id="@+id/ime_status"
-                style="@style/SettingsStatusText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ime_status_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/ime_status"
+                    style="@style/SettingsStatusText"
+                    android:layout_width="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/open_ime_settings"
@@ -86,12 +147,28 @@
             <View style="@style/SettingsDivider" />
 
             <TextView
-                style="@style/SettingsSectionTitle.First"
+                style="@style/SettingsSectionTitle"
                 android:text="@string/permission_section" />
 
-            <TextView
-                android:id="@+id/permission_status"
-                style="@style/SettingsStatusText" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/permission_status_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/permission_status"
+                    style="@style/SettingsStatusText"
+                    android:layout_width="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/grant_permission"
@@ -117,7 +194,7 @@
                 android:id="@+id/recognition_language"
                 style="@style/SettingsSpinner" />
 
-            <Switch
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/use_itn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -125,9 +202,7 @@
                 android:minHeight="48dp"
                 android:text="@string/use_itn"
                 android:textColor="@color/voice_text_primary"
-                android:textSize="16sp"
-                android:thumbTint="@color/voice_mic_idle"
-                android:trackTint="@color/voice_wave_idle" />
+                android:textSize="16sp" />
 
             <TextView
                 style="@style/SettingsItemDescription"
@@ -136,34 +211,68 @@
 
         <LinearLayout style="@style/SettingsCard">
 
-            <TextView
-                style="@style/SettingsSectionTitle.First"
-                android:text="@string/vad_section" />
+            <LinearLayout
+                android:id="@+id/advanced_toggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal">
 
-            <TextView
-                style="@style/SettingsItemTitle"
-                android:text="@string/vad_sensitivity" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-medium"
+                    android:text="@string/advanced_section"
+                    android:textColor="@color/voice_text_primary"
+                    android:textSize="16sp" />
 
-            <TextView
-                style="@style/SettingsItemDescription"
-                android:text="@string/vad_sensitivity_description" />
+                <ImageView
+                    android:id="@+id/advanced_chevron"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_expand_more" />
+            </LinearLayout>
 
-            <Spinner
-                android:id="@+id/vad_sensitivity"
-                style="@style/SettingsSpinner" />
+            <LinearLayout
+                android:id="@+id/advanced_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <TextView
-                style="@style/SettingsItemTitle"
-                android:layout_marginTop="20dp"
-                android:text="@string/endpoint_silence" />
+                <TextView
+                    style="@style/SettingsSectionTitle.First"
+                    android:text="@string/vad_section" />
 
-            <TextView
-                style="@style/SettingsItemDescription"
-                android:text="@string/endpoint_silence_description" />
+                <TextView
+                    style="@style/SettingsItemTitle"
+                    android:text="@string/vad_sensitivity" />
 
-            <Spinner
-                android:id="@+id/endpoint_silence"
-                style="@style/SettingsSpinner" />
+                <TextView
+                    style="@style/SettingsItemDescription"
+                    android:text="@string/vad_sensitivity_description" />
+
+                <Spinner
+                    android:id="@+id/vad_sensitivity"
+                    style="@style/SettingsSpinner" />
+
+                <TextView
+                    style="@style/SettingsItemTitle"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/endpoint_silence" />
+
+                <TextView
+                    style="@style/SettingsItemDescription"
+                    android:text="@string/endpoint_silence_description" />
+
+                <Spinner
+                    android:id="@+id/endpoint_silence"
+                    style="@style/SettingsSpinner" />
+            </LinearLayout>
         </LinearLayout>
 
         <Button
@@ -199,25 +308,24 @@
                 style="@style/SettingsSectionTitle.First"
                 android:text="@string/legal_section" />
 
-            <Button
+            <TextView
                 android:id="@+id/open_privacy_policy"
-                style="@style/SettingsSecondaryButton"
-                android:layout_marginTop="0dp"
+                style="@style/SettingsRow"
                 android:text="@string/open_privacy_policy" />
 
-            <Button
+            <TextView
                 android:id="@+id/open_third_party_notices"
-                style="@style/SettingsSecondaryButton"
+                style="@style/SettingsRow"
                 android:text="@string/open_third_party_notices" />
 
-            <Button
+            <TextView
                 android:id="@+id/open_model_attribution"
-                style="@style/SettingsSecondaryButton"
+                style="@style/SettingsRow"
                 android:text="@string/open_model_attribution" />
 
-            <Button
+            <TextView
                 android:id="@+id/open_onnx_notices"
-                style="@style/SettingsSecondaryButton"
+                style="@style/SettingsRow"
                 android:text="@string/open_onnx_notices" />
         </LinearLayout>
     </LinearLayout>

@@ -1,9 +1,10 @@
 package com.fcitx5sensevoice
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.ComponentActivity
 
 /**
  * Displays bundled legal and attribution documents from assets.
@@ -11,7 +12,7 @@ import android.widget.TextView
  * @author stormrise
  * @date 2026/09/29
  */
-class LegalDocumentActivity : Activity() {
+class LegalDocumentActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(wrapUiLocale(newBase))
     }
@@ -19,13 +20,15 @@ class LegalDocumentActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_legal_document)
-        configureEdgeToEdge(findViewById(R.id.legal_body))
+        configureEdgeToEdge(findViewById(R.id.legal_content))
 
         val document = intent.getStringExtra(EXTRA_DOCUMENT) ?: DOCUMENT_PRIVACY
         val definition = LegalDocuments.byId(document)
             ?: throw IllegalArgumentException("Unknown legal document: $document")
 
         title = getString(definition.titleRes)
+        findViewById<TextView>(R.id.legal_title).text = getString(definition.titleRes)
+        findViewById<ImageButton>(R.id.legal_back).setOnClickListener { finish() }
         findViewById<TextView>(R.id.legal_body).text =
             assets.open(definition.assetPath).bufferedReader().use { it.readText() }
     }

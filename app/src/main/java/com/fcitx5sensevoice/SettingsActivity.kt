@@ -1,33 +1,45 @@
 package com.fcitx5sensevoice
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Spinner
-import android.widget.Switch
 import android.widget.TextView
+import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.material.materialswitch.MaterialSwitch
 
-class SettingsActivity : Activity() {
+class SettingsActivity : ComponentActivity() {
     private val settingsStore by lazy { AppSettings(this) }
     private lateinit var uiLanguageSpinner: Spinner
+    private lateinit var uiThemeSpinner: Spinner
     private lateinit var languageSpinner: Spinner
-    private lateinit var itnSwitch: Switch
+    private lateinit var itnSwitch: MaterialSwitch
     private lateinit var vadSensitivitySpinner: Spinner
     private lateinit var endpointSilenceSpinner: Spinner
     private lateinit var imeStatus: TextView
     private lateinit var permissionStatus: TextView
     private lateinit var permissionAction: Button
+    private lateinit var imeStatusIcon: ImageView
+    private lateinit var permissionStatusIcon: ImageView
+    private lateinit var advancedContent: View
+    private lateinit var advancedChevron: View
+    private val microphonePermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { renderPermissionState() }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(wrapUiLocale(newBase))
@@ -38,15 +50,20 @@ class SettingsActivity : Activity() {
         setContentView(R.layout.activity_settings)
         configureEdgeToEdge(findViewById(R.id.settings_content))
         bindViews()
+        // ponytail: TEMP locale diagnostics, remove once the switch is confirmed on device.
+        Log.i(TAG_LOCALE, "created sdk=${Build.VERSION.SDK_INT} saved=${settingsStore.loadUiLanguage()} " +
+            "config=${resources.configuration.locales} title=${getString(R.string.settings_title)}")
         populateSpinners()
         showSettings(settingsStore.load())
         findViewById<Button>(R.id.reset_defaults).setOnClickListener {
             showSettings(AsrSettings.DEFAULT)
-            applyUiLanguage(UiLanguage.SYSTEM)
+            applyUiPreferences(UiLanguage.SYSTEM, UiTheme.SYSTEM)
         }
         permissionAction.setOnClickListener { requestMicrophonePermission() }
         findViewById<Button>(R.id.open_ime_settings).setOnClickListener { openInputMethodSettings() }
         bindAboutAndLegal()
+        findViewById<View>(R.id.settings_back).setOnClickListener { finish() }
+        findViewById<View>(R.id.advanced_toggle).setOnClickListener { toggleAdvancedSettings() }
 
         if (
             savedInstanceState == null &&
@@ -68,18 +85,9 @@ class SettingsActivity : Activity() {
         super.onPause()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode != REQUEST_MICROPHONE) return
-        renderPermissionState()
-    }
-
     private fun bindViews() {
         uiLanguageSpinner = findViewById(R.id.ui_language)
+        uiThemeSpinner = findViewById(R.id.ui_theme)
         languageSpinner = findViewById(R.id.recognition_language)
         itnSwitch = findViewById(R.id.use_itn)
         vadSensitivitySpinner = findViewById(R.id.vad_sensitivity)
@@ -87,18 +95,35 @@ class SettingsActivity : Activity() {
         imeStatus = findViewById(R.id.ime_status)
         permissionStatus = findViewById(R.id.permission_status)
         permissionAction = findViewById(R.id.grant_permission)
+        imeStatusIcon = findViewById(R.id.ime_status_icon)
+        permissionStatusIcon = findViewById(R.id.permission_status_icon)
+        advancedContent = findViewById(R.id.advanced_content)
+        advancedChevron = findViewById(R.id.advanced_chevron)
     }
 
     private fun populateSpinners() {
         uiLanguageSpinner.setEntries(R.array.ui_language_labels)
+        uiThemeSpinner.setEntries(R.array.ui_theme_labels)
         languageSpinner.setEntries(R.array.recognition_language_labels)
         vadSensitivitySpinner.setEntries(R.array.vad_sensitivity_labels)
         endpointSilenceSpinner.setEntries(R.array.endpoint_silence_labels)
         uiLanguageSpinner.setSelection(UiLanguage.entries.indexOf(settingsStore.loadUiLanguage()))
+        uiThemeSpinner.setSelection(UiTheme.entries.indexOf(settingsStore.loadUiTheme()))
         uiLanguageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                applyUiLanguage(
-                    UiLanguage.entries[position.coerceIn(UiLanguage.entries.indices)],
+                applyUiPreferences(
+                    language = UiLanguage.entries[position.coerceIn(UiLanguage.entries.indices)],
+                    theme = settingsStore.loadUiTheme(),
+                )
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+        uiThemeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                applyUiPreferences(
+                    language = settingsStore.loadUiLanguage(),
+                    theme = UiTheme.entries[position.coerceIn(UiTheme.entries.indices)],
                 )
             }
 
@@ -132,13 +157,12 @@ class SettingsActivity : Activity() {
         ],
     )
 
-    private fun applyUiLanguage(language: UiLanguage) {
-        val previous = settingsStore.loadUiLanguage()
+    private fun applyUiPreferences(language: UiLanguage, theme: UiTheme) {
+        Log.i(TAG_LOCALE, "apply $language $theme saved=${settingsStore.loadUiLanguage()}")
+        if (language == settingsStore.loadUiLanguage() && theme == settingsStore.loadUiTheme()) return
         persistUiLanguage(this, language)
-        // ponytail: API 33+ LocaleManager recreates the activity; calling recreate() here races it.
-        if (Build.VERSION.SDK_INT < 33 && language != previous) {
-            recreate()
-        }
+        settingsStore.saveUiTheme(theme)
+        recreate()
     }
 
     private fun FloatArray.nearestIndex(value: Float): Int {
@@ -151,10 +175,22 @@ class SettingsActivity : Activity() {
 
     private fun renderImeState() {
         val enabled = isImeEnabled()
-        imeStatus.setText(if (enabled) R.string.ime_enabled else R.string.ime_disabled)
-        imeStatus.setTextColor(
-            getColor(if (enabled) R.color.settings_status_ok else R.color.settings_status_warn),
-        )
+        renderStatus(imeStatusIcon, imeStatus, enabled, if (enabled) R.string.ime_enabled else R.string.ime_disabled)
+    }
+
+    // Icon and text carry the state; colour only reinforces it for colour-blind users.
+    private fun renderStatus(icon: ImageView, label: TextView, ok: Boolean, textRes: Int) {
+        val color = getColor(if (ok) R.color.settings_status_ok else R.color.settings_status_warn)
+        label.setText(textRes)
+        label.setTextColor(color)
+        icon.setImageResource(if (ok) R.drawable.ic_check_circle else R.drawable.ic_warning_circle)
+        icon.imageTintList = ColorStateList.valueOf(color)
+    }
+
+    private fun toggleAdvancedSettings() {
+        val expand = advancedContent.visibility != View.VISIBLE
+        advancedContent.visibility = if (expand) View.VISIBLE else View.GONE
+        advancedChevron.animate().rotation(if (expand) 180f else 0f).setDuration(200L).start()
     }
 
     private fun isImeEnabled(): Boolean {
@@ -168,15 +204,17 @@ class SettingsActivity : Activity() {
 
     private fun renderPermissionState() {
         val granted = hasPermission()
-        permissionStatus.setText(if (granted) R.string.permission_granted else R.string.permission_explanation)
-        permissionStatus.setTextColor(
-            getColor(if (granted) R.color.settings_status_ok else R.color.settings_status_warn),
+        renderStatus(
+            permissionStatusIcon,
+            permissionStatus,
+            granted,
+            if (granted) R.string.permission_granted else R.string.permission_explanation,
         )
         permissionAction.visibility = if (granted) View.GONE else View.VISIBLE
     }
 
     private fun requestMicrophonePermission() {
-        requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_MICROPHONE)
+        microphonePermission.launch(Manifest.permission.RECORD_AUDIO)
     }
 
     private fun hasPermission(): Boolean =
@@ -192,16 +230,16 @@ class SettingsActivity : Activity() {
         findViewById<Button>(R.id.open_github_repository).setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(GITHUB_REPOSITORY_URL)))
         }
-        findViewById<Button>(R.id.open_privacy_policy).setOnClickListener {
+        findViewById<TextView>(R.id.open_privacy_policy).setOnClickListener {
             openLegalDocument(LegalDocumentActivity.DOCUMENT_PRIVACY)
         }
-        findViewById<Button>(R.id.open_third_party_notices).setOnClickListener {
+        findViewById<TextView>(R.id.open_third_party_notices).setOnClickListener {
             openLegalDocument(LegalDocumentActivity.DOCUMENT_THIRD_PARTY)
         }
-        findViewById<Button>(R.id.open_model_attribution).setOnClickListener {
+        findViewById<TextView>(R.id.open_model_attribution).setOnClickListener {
             openLegalDocument(LegalDocumentActivity.DOCUMENT_MODEL)
         }
-        findViewById<Button>(R.id.open_onnx_notices).setOnClickListener {
+        findViewById<TextView>(R.id.open_onnx_notices).setOnClickListener {
             openLegalDocument(LegalDocumentActivity.DOCUMENT_ONNX_NOTICES)
         }
     }
@@ -218,7 +256,7 @@ class SettingsActivity : Activity() {
     companion object {
         const val EXTRA_REQUEST_MICROPHONE_PERMISSION = "request_microphone_permission"
         private const val GITHUB_REPOSITORY_URL = "https://github.com/stormrise/fcitx5-sensevoice"
-        private const val REQUEST_MICROPHONE = 1
+        private const val TAG_LOCALE = "FcitxLocale"
         private val VAD_THRESHOLDS = floatArrayOf(0.15f, AsrSettings.DEFAULT_VAD_THRESHOLD, 0.4f)
         private val ENDPOINT_SILENCE_SECONDS =
             floatArrayOf(0.5f, AsrSettings.DEFAULT_VAD_MIN_SILENCE_SECONDS, 1f, 1.5f)

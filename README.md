@@ -40,7 +40,7 @@ VoiceInputMethodService (main thread: lifecycle, UI, InputConnection)
         InputConnection.commitText() per completed speech segment
 ```
 
-- Audio: 16 kHz, mono, signed PCM16, bounded to 30 seconds.
+- Audio: 16 kHz, mono, signed PCM16. Recording has no length limit; the no-segment fallback keeps only the latest 30 seconds.
 - ASR: Silero VAD probabilities are evaluated every 512 samples and passed through a tested local endpoint state machine, followed by non-streaming SenseVoice decode for each completed speech segment. This provides pause-delimited incremental commits, not model-level partial results.
 - ABI: `arm64-v8a` only.
 - Android: `minSdk 28`, `targetSdk 36`.
@@ -60,7 +60,7 @@ The released upstream SenseVoiceSmall checkpoint supports speech recognition and
 | Japanese | `ja` |
 | Korean | `ko` |
 
-Upstream also exposes `auto` for language identification and `nospeech` as a control option. This five-language list describes the released base checkpoint; the current `2025-09-09` app model is a Cantonese fine-tune described below. The app defaults to Mandarin (`zh`), but its launcher settings page can select `auto`, `zh`, `yue`, `en`, `ja`, or `ko`. The Android voice-IME subtype remains `zh_CN` for Fcitx5 discovery and does not restrict the recognizer setting.
+Upstream also exposes `auto` for language identification and `nospeech` as a control option. This five-language list describes the released base checkpoint; the current `2025-09-09` app model is a Cantonese fine-tune described below. The app defaults to automatic language identification (`auto`), and its launcher settings page can select `auto`, `zh`, `yue`, `en`, `ja`, or `ko`. The Android voice-IME subtype remains `zh_CN` for Fcitx5 discovery and does not restrict the recognizer setting.
 
 ## Requirements
 
@@ -161,7 +161,7 @@ The pinned SenseVoice, token, and VAD files live in the `sensevoice_models` inst
 ## Known limitations
 
 - The development APK is large because it embeds the roughly 228 MiB INT8 model.
-- Mandarin is the default language. Automatic and explicit five-language modes are available in settings, but recognition quality depends on the current Cantonese-fine-tuned weights.
+- Automatic language identification is the default. Automatic and explicit five-language modes are available in settings, but recognition quality depends on the current Cantonese-fine-tuned weights.
 - SenseVoice remains an offline model: there are no word-by-word partial results or composing text. Incremental commits occur only after VAD finds a speech endpoint.
 - VAD minimum speech (about 256 ms), pre-roll (about 224 ms), and maximum segment (15 seconds) remain fixed. Sensitivity and endpoint silence are configurable. If VAD produces no segment, explicit stop falls back to one full-recording SenseVoice decode so captured speech is not lost.
 - No QNN/NPU or custom dictionary.

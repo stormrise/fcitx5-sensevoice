@@ -6,13 +6,15 @@ import org.junit.Test
 
 class AudioBufferTest {
     @Test
-    fun bufferIsBoundedAndClearedWhenTaken() {
+    fun bufferKeepsLatestSamplesAndClearsWhenTaken() {
         val buffer = AudioBuffer(3)
 
-        assertEquals(2, buffer.append(shortArrayOf(1, 2)))
-        assertEquals(1, buffer.append(shortArrayOf(3, 4)))
-        assertArrayEquals(shortArrayOf(1, 2, 3), buffer.take())
+        buffer.append(shortArrayOf(1, 2))
+        buffer.append(shortArrayOf(3, 4))
+        assertArrayEquals(shortArrayOf(2, 3, 4), buffer.take())
         assertArrayEquals(shortArrayOf(), buffer.take())
+        buffer.append(shortArrayOf(5, 6, 7, 8, 9))
+        assertArrayEquals(shortArrayOf(7, 8, 9), buffer.take())
     }
 
     @Test

@@ -14,7 +14,7 @@ internal class SenseVoiceEngine(
     private val model: SenseVoiceModelAssets,
     private val settings: AsrSettings,
 ) : AsrEngine {
-    private val audio = AudioBuffer(MAX_AUDIO_SAMPLES)
+    private val audio = AudioBuffer(FALLBACK_BUFFER_SAMPLES)
     private var recognizer: OfflineRecognizer? = null
     private var vad: Vad? = null
     private var segmenter: SileroVadSegmenter? = null
@@ -80,10 +80,7 @@ internal class SenseVoiceEngine(
 
     @Synchronized
     override fun acceptAudio(samples: ShortArray): List<String> {
-        val accepted = audio.append(samples)
-        if (accepted != samples.size) {
-            Log.w(TAG, "ASR_BUFFER_FULL droppedSamples=${samples.size - accepted}")
-        }
+        audio.append(samples)
         return decodeSegments(checkNotNull(segmenter) { "Silero VAD segmenter is not initialized" }.accept(samples))
     }
 
@@ -177,8 +174,8 @@ internal class SenseVoiceEngine(
         const val VAD_PRE_ROLL_SECONDS = 0.2f
         const val VAD_MAX_SPEECH_SECONDS = 15.0f
         const val VAD_WINDOW_SAMPLES = 512
-        const val MAX_RECORDING_SECONDS = 30
-        const val MAX_AUDIO_SAMPLES = SAMPLE_RATE * MAX_RECORDING_SECONDS
+        const val FALLBACK_BUFFER_SECONDS = 30
+        const val FALLBACK_BUFFER_SAMPLES = SAMPLE_RATE * FALLBACK_BUFFER_SECONDS
     }
 }
 

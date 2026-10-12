@@ -8,6 +8,12 @@
         <item>🇰🇷 한국어</item>
     </string-array>
 
+    <string-array name="ui_theme_labels">
+        <item>跟随系统 / System</item>
+        <item>浅色 / Light</item>
+        <item>深色 / Dark</item>
+    </string-array>
+
     <string-array name="recognition_language_labels">
         <item>🌐 자동 감지</item>
         <item>🇨🇳 중국어 표준어</item>

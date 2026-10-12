@@ -1,6 +1,10 @@
 package com.fcitx5sensevoice
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.content.Context
+import android.content.res.Configuration
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.pm.PackageManager
@@ -10,9 +14,12 @@ import android.os.Looper
 import android.util.Log
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.animation.LinearInterpolator
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import android.widget.TextView
@@ -28,6 +35,10 @@ class VoiceInputMethodService : InputMethodService() {
     private lateinit var voiceWaveView: VoiceWaveView
     private lateinit var microphoneButton: ImageButton
     private lateinit var deleteButton: ImageButton
+    private lateinit var hintView: TextView
+    private lateinit var loadingSkeleton: View
+    private lateinit var loadingSheen: View
+    private var sheenAnimator: ObjectAnimator? = null
     private var recordingStartedAtMs = 0L
     private var capturedSamples = 0
     private var recognizedSegments = 0
@@ -40,6 +51,7 @@ class VoiceInputMethodService : InputMethodService() {
     private var asrInitError: String? = null
     private var loadedAsrSettings: AsrSettings? = null
     private var loadedUiLanguage: UiLanguage? = null
+    private var loadedNightMode = -1
     private var asrInitializationGeneration = 0L
     private var inputSession = 0L
     private var recordingGeneration = 0L
@@ -86,6 +98,10 @@ class VoiceInputMethodService : InputMethodService() {
         )
     }
 
+    // The service's own resources are frozen at creation, so a language or theme change in Settings
+    // never reaches them. Derive the UI context from the current preferences on every call.
+    private fun uiContext(): Context = wrapUiLocale(applicationContext)
+
     override fun onCreate() {
         super.onCreate()
         window?.window?.configureDisplayCutout()
@@ -97,11 +113,7 @@ class VoiceInputMethodService : InputMethodService() {
 
     override fun onStartInputView(info: android.view.inputmethod.EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
-        val uiLanguage = AppSettings(this).loadUiLanguage()
-        if (loadedUiLanguage != uiLanguage) {
-            loadedUiLanguage = uiLanguage
-            if (::statusView.isInitialized) setInputView(inflateInputView())
-        }
+        refreshInputViewIfUiChanged()
         inputSession++
         inputViewActive = true
         reloadAsrIfSettingsChanged()
@@ -110,10 +122,29 @@ class VoiceInputMethodService : InputMethodService() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        refreshInputViewIfUiChanged()
+    }
+
+    // Rebuilding the panel would drop an in-progress recording, so defer language/night-mode switches until idle.
+    private fun refreshInputViewIfUiChanged() {
+        val uiLanguage = AppSettings(this).loadUiLanguage()
+        val nightMode = uiContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (loadedUiLanguage == uiLanguage && loadedNightMode == nightMode) return
+        if (recorder.state != AudioRecorderState.IDLE || recordingSessionActive) return
+        loadedUiLanguage = uiLanguage
+        loadedNightMode = nightMode
+        if (::statusView.isInitialized) setInputView(inflateInputView())
+    }
+
     private fun inflateInputView(): View =
-        layoutInflater.cloneInContext(wrapUiLocale(this)).inflate(R.layout.input_view, null).also { view ->
+        LayoutInflater.from(uiContext()).inflate(R.layout.input_view, null).also { view ->
             view.applyImePanelInsets()
             statusView = view.findViewById(R.id.status)
+            hintView = view.findViewById(R.id.status_hint)
+            loadingSkeleton = view.findViewById(R.id.loading_skeleton)
+            loadingSheen = view.findViewById(R.id.loading_sheen)
             voiceWaveView = view.findViewById(R.id.voice_wave)
             view.findViewById<ImageButton>(R.id.back).setOnClickListener {
                 returnToPreviousInputMethod()
@@ -129,6 +160,7 @@ class VoiceInputMethodService : InputMethodService() {
                 setOnClickListener { toggleRecording() }
                 setOnTouchListener(::onMicrophoneTouch)
             }
+            view.findViewById<ImageButton>(R.id.enter).setOnClickListener { sendEnterOrEditorAction() }
             renderIdleState()
         }
 
@@ -139,6 +171,7 @@ class VoiceInputMethodService : InputMethodService() {
         recognizeWhenStopped = false
         recordingCancelled = false
         stopDeleteRepeat()
+        stopSheen()
         recorder.stop()
         resetAsr()
         super.onFinishInputView(finishingInput)
@@ -261,6 +294,18 @@ class VoiceInputMethodService : InputMethodService() {
         sendDownUpKeyEvents(KeyEvent.KEYCODE_DEL)
     }
 
+    // Runs the field's own action (Send, Go, Search, Done) when it has one; otherwise inserts a new line.
+    private fun sendEnterOrEditorAction() {
+        val options = currentInputEditorInfo?.imeOptions ?: 0
+        val action = options and EditorInfo.IME_MASK_ACTION
+        val actionAvailable = action != EditorInfo.IME_ACTION_NONE && action != EditorInfo.IME_ACTION_UNSPECIFIED
+        if (actionAvailable && options and EditorInfo.IME_FLAG_NO_ENTER_ACTION == 0) {
+            currentInputConnection?.performEditorAction(action)
+        } else {
+            sendDownUpKeyEvents(KeyEvent.KEYCODE_ENTER)
+        }
+    }
+
     private fun returnToPreviousInputMethod() {
         val previous = switchToPreviousInputMethod()
         if (!previous) {
@@ -329,19 +374,19 @@ class VoiceInputMethodService : InputMethodService() {
 
             AudioRecorderState.STARTING -> {
                 voiceState = VoiceState.STARTING
-                statusView.setText(R.string.status_starting)
+                showStatus(text(R.string.status_starting))
                 setMicrophoneAppearance(recording = true, enabled = true)
             }
 
             AudioRecorderState.RECORDING -> {
                 voiceState = VoiceState.RECORDING
-                statusView.setText(R.string.status_listening)
+                showStatus(text(R.string.status_listening), text(R.string.status_listening_hint))
                 setMicrophoneAppearance(recording = true, enabled = true)
             }
 
             AudioRecorderState.STOPPING -> {
                 voiceState = VoiceState.STOPPING
-                statusView.setText(R.string.status_stopping)
+                showStatus(text(R.string.status_stopping))
                 setMicrophoneAppearance(recording = true, enabled = false)
             }
 
@@ -354,23 +399,30 @@ class VoiceInputMethodService : InputMethodService() {
         voiceState = VoiceState.IDLE
         when {
             asrInitializing -> {
-                statusView.setText(R.string.status_model_initializing)
+                showStatus(
+                    text(R.string.status_model_initializing),
+                    text(R.string.status_model_initializing_hint),
+                    busy = true,
+                )
                 setMicrophoneAppearance(recording = false, enabled = false)
             }
 
             asrInitError != null -> {
                 voiceState = VoiceState.ERROR
-                statusView.text = getString(R.string.status_asr_init_failed, asrInitError)
+                showStatus(
+                    text(R.string.status_asr_init_failed),
+                    text(R.string.status_asr_init_failed_hint),
+                )
                 setMicrophoneAppearance(recording = false, enabled = true)
             }
 
             !hasMicrophonePermission() -> {
-                statusView.setText(R.string.status_permission_required)
+                showStatus(text(R.string.status_permission_required), text(R.string.status_permission_required_hint))
                 setMicrophoneAppearance(recording = false, enabled = true)
             }
 
             else -> {
-                statusView.setText(R.string.status_ready)
+                showStatus(text(R.string.status_ready), text(R.string.status_ready_hint))
                 setMicrophoneAppearance(recording = false, enabled = true)
             }
         }
@@ -385,7 +437,10 @@ class VoiceInputMethodService : InputMethodService() {
         Log.e(TAG, "RECORD_FAILED", error)
         if (::statusView.isInitialized) {
             voiceState = VoiceState.ERROR
-            statusView.text = getString(R.string.status_recording_failed, error.message ?: error.javaClass.simpleName)
+            showStatus(
+                text(R.string.status_recording_failed),
+                text(R.string.status_recording_failed_hint, error.message ?: error.javaClass.simpleName),
+            )
             setMicrophoneAppearance(recording = false, enabled = true)
         }
     }
@@ -402,7 +457,7 @@ class VoiceInputMethodService : InputMethodService() {
     private fun renderCancelledState() {
         if (!viewsInitialized()) return
         voiceState = VoiceState.IDLE
-        statusView.setText(R.string.status_cancelled)
+        showStatus(text(R.string.status_cancelled))
         setMicrophoneAppearance(recording = false, enabled = true)
     }
 
@@ -453,13 +508,13 @@ class VoiceInputMethodService : InputMethodService() {
         val engine = asrEngine
         if (engine == null) {
             voiceState = VoiceState.ERROR
-            statusView.setText(R.string.status_asr_unavailable)
+            showStatus(text(R.string.status_asr_unavailable), text(R.string.status_asr_unavailable_hint))
             setMicrophoneAppearance(recording = false, enabled = true)
             Log.e(TAG, "ASR_FAILED reason=engine_unavailable")
             return
         }
         voiceState = VoiceState.PROCESSING
-        statusView.setText(R.string.status_processing)
+        showStatus(text(R.string.status_processing), busy = true)
         setMicrophoneAppearance(recording = false, enabled = false)
         val recognitionInputSession = inputSession
         val generation = recordingGeneration
@@ -471,7 +526,7 @@ class VoiceInputMethodService : InputMethodService() {
                     results.forEach { text -> commitSegment(text, recognitionInputSession, generation) }
                     if (recognizedSegments == 0) {
                         voiceState = VoiceState.RESULT
-                        statusView.setText(R.string.status_empty_result)
+                        showStatus(text(R.string.status_empty_result), text(R.string.status_empty_result_hint))
                     } else if (committedSegments == recognizedSegments) {
                         renderIdleState()
                     }
@@ -491,14 +546,14 @@ class VoiceInputMethodService : InputMethodService() {
         recognizedSegments++
         if (!inputViewActive || recognitionInputSession != inputSession) {
             Log.w(TAG, "COMMIT_FAILED reason=input_session_changed textLength=${text.length}")
-            if (viewsInitialized()) statusView.setText(R.string.status_result_not_committed)
+            showStatus(text(R.string.status_result_not_committed), text(R.string.status_result_not_committed_hint))
             return
         }
 
         val inputConnection = currentInputConnection
         if (inputConnection == null) {
             Log.w(TAG, "COMMIT_FAILED reason=no_input_connection textLength=${text.length}")
-            statusView.setText(R.string.status_result_not_committed)
+            showStatus(text(R.string.status_result_not_committed), text(R.string.status_result_not_committed_hint))
             return
         }
 
@@ -510,7 +565,7 @@ class VoiceInputMethodService : InputMethodService() {
             Log.i(TAG, "COMMIT_SUCCESS textLength=${text.length}")
         } else {
             Log.w(TAG, "COMMIT_FAILED reason=rejected textLength=${text.length}")
-            statusView.setText(R.string.status_result_not_committed)
+            showStatus(text(R.string.status_result_not_committed), text(R.string.status_result_not_committed_hint))
         }
     }
 
@@ -523,7 +578,10 @@ class VoiceInputMethodService : InputMethodService() {
             recorder.stop()
             resetAsr()
             voiceState = VoiceState.ERROR
-            statusView.text = getString(R.string.status_asr_failed, error.message ?: error.javaClass.simpleName)
+            showStatus(
+                text(R.string.status_asr_failed),
+                text(R.string.status_asr_failed_hint, error.message ?: error.javaClass.simpleName),
+            )
             setMicrophoneAppearance(recording = false, enabled = true)
         }
     }
@@ -549,6 +607,36 @@ class VoiceInputMethodService : InputMethodService() {
     private fun viewsInitialized(): Boolean =
         ::statusView.isInitialized && ::voiceWaveView.isInitialized && ::microphoneButton.isInitialized
 
+    private fun text(id: Int, vararg args: Any): String = uiContext().getString(id, *args)
+
+    // Title is the state, hint is the next action. Busy states show a gray sheen in the detail slot instead.
+    // Both views stay laid out (INVISIBLE, not GONE) so the panel height never changes.
+    private fun showStatus(title: String, hint: String? = null, busy: Boolean = false) {
+        if (!viewsInitialized()) return
+        statusView.text = title
+        hintView.text = hint.orEmpty()
+        hintView.visibility = if (busy) View.INVISIBLE else View.VISIBLE
+        loadingSkeleton.visibility = if (busy) View.VISIBLE else View.GONE
+        if (busy) loadingSkeleton.post { if (loadingSkeleton.visibility == View.VISIBLE) startSheen() } else stopSheen()
+    }
+
+    private fun startSheen() {
+        val travel = loadingSkeleton.width.toFloat()
+        if (travel == 0f || sheenAnimator?.isRunning == true) return
+        sheenAnimator = ObjectAnimator.ofFloat(loadingSheen, View.TRANSLATION_X, -loadingSheen.width.toFloat(), travel).apply {
+            duration = SHEEN_DURATION_MS
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = LinearInterpolator()
+            start()
+        }
+    }
+
+    private fun stopSheen() {
+        sheenAnimator?.cancel()
+        sheenAnimator = null
+        if (::loadingSheen.isInitialized) loadingSheen.translationX = 0f
+    }
+
     private fun setMicrophoneAppearance(recording: Boolean, enabled: Boolean) {
         if (!::microphoneButton.isInitialized || !::voiceWaveView.isInitialized) return
         microphoneButton.isEnabled = enabled
@@ -565,7 +653,7 @@ class VoiceInputMethodService : InputMethodService() {
                 if (!enabled && !recording) {
                     R.color.voice_mic_disabled_content
                 } else {
-                    android.R.color.white
+                    R.color.voice_on_accent
                 },
             ),
         )
@@ -579,7 +667,7 @@ class VoiceInputMethodService : InputMethodService() {
             ),
         )
         voiceWaveView.setRecording(voiceState == VoiceState.RECORDING)
-        microphoneButton.contentDescription = getString(
+        microphoneButton.contentDescription = uiContext().getString(
             when {
                 !enabled -> R.string.microphone_busy
                 recording -> R.string.stop_recording
@@ -602,5 +690,6 @@ class VoiceInputMethodService : InputMethodService() {
         const val TAG = "FCITX5-SENSEVOICE"
         const val SAMPLE_RATE = 16_000
         const val DELETE_REPEAT_INTERVAL_MS = 100L
+        const val SHEEN_DURATION_MS = 1400L
     }
 }

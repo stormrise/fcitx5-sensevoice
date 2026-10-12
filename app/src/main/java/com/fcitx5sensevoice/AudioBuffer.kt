@@ -1,5 +1,7 @@
 package com.fcitx5sensevoice
 
+// Keeps only the most recent `capacity` samples. Recording itself is unbounded; the buffer only feeds
+// the no-segment fallback, so older audio is dropped instead of stopping the recording.
 internal class AudioBuffer(capacity: Int) {
     private val data = ShortArray(capacity)
     private var size = 0
@@ -9,11 +11,15 @@ internal class AudioBuffer(capacity: Int) {
     }
 
     @Synchronized
-    fun append(samples: ShortArray): Int {
-        val count = minOf(samples.size, data.size - size)
-        samples.copyInto(data, destinationOffset = size, endIndex = count)
-        size += count
-        return count
+    fun append(samples: ShortArray) {
+        val incoming = if (samples.size > data.size) samples.copyOfRange(samples.size - data.size, samples.size) else samples
+        val overflow = size + incoming.size - data.size
+        if (overflow > 0) {
+            data.copyInto(data, destinationOffset = 0, startIndex = overflow, endIndex = size)
+            size -= overflow
+        }
+        incoming.copyInto(data, destinationOffset = size)
+        size += incoming.size
     }
 
     @Synchronized

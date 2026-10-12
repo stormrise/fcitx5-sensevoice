@@ -40,7 +40,7 @@ VoiceInputMethodService（主线程：生命周期、界面、InputConnection）
         每个完整语音片段通过 InputConnection.commitText() 提交
 ```
 
-- 音频：16 kHz、单声道、有符号 PCM16，最长录音 30 秒。
+- 音频：16 kHz、单声道、有符号 PCM16，录音没有时长上限；无语音片段时的回退识别只使用最近 30 秒音频。
 - 识别：每 512 个采样点计算一次 Silero VAD 概率，由本地端点状态机切分语音，再对每个完整片段执行非流式 SenseVoice 解码。这是按停顿分段提交，不是模型级逐字流式结果。
 - ABI：仅 `arm64-v8a`。
 - Android：`minSdk 28`，`targetSdk 36`。
@@ -60,7 +60,7 @@ VoiceInputMethodService（主线程：生命周期、界面、InputConnection）
 | 日语 | `ja` |
 | 韩语 | `ko` |
 
-上游还提供用于自动语言识别的 `auto`，以及控制选项 `nospeech`。上述五种语言描述的是已发布的基础 checkpoint；本应用当前使用的 `2025-09-09` 模型是下文说明的粤语微调权重。应用默认使用普通话 `zh`，可在启动器设置页选择 `auto`、`zh`、`yue`、`en`、`ja` 或 `ko`。Android 语音输入法 subtype 仍为 `zh_CN`，它只用于 Fcitx5 发现输入法，不限制实际识别语言。
+上游还提供用于自动语言识别的 `auto`，以及控制选项 `nospeech`。上述五种语言描述的是已发布的基础 checkpoint；本应用当前使用的 `2025-09-09` 模型是下文说明的粤语微调权重。应用默认使用自动语言识别 `auto`，可在启动器设置页选择 `auto`、`zh`、`yue`、`en`、`ja` 或 `ko`。Android 语音输入法 subtype 仍为 `zh_CN`，它只用于 Fcitx5 发现输入法，不限制实际识别语言。
 
 ## 环境要求
 
@@ -163,7 +163,7 @@ adb shell ime enable com.fcitx5sensevoice/.VoiceInputMethodService
 ## 已知限制
 
 - 开发 APK 内置约 228 MiB INT8 模型，因此体积较大。
-- 默认使用普通话；设置中可选择自动识别或明确指定五种语言，但识别质量取决于当前粤语微调权重。
+- 默认自动识别语言；设置中可选择自动识别或明确指定五种语言，但识别质量取决于当前粤语微调权重。
 - SenseVoice 本身仍是离线整段模型：没有逐字 partial result 或 composing text；只有 VAD 检测到语音端点后才分段提交。
 - VAD 最短语音约 256 ms、预留音频约 224 ms、单段最长 15 秒仍固定；收音灵敏度和停顿结束时长可配置。若 VAD 未输出任何片段，手动停止时会对完整录音执行一次回退解码，避免已录语音丢失。
 - 没有 QNN/NPU 或自定义词典。

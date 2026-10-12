@@ -79,20 +79,10 @@ class PcmAudioRecorder(
             updateState(AudioRecorderState.RECORDING)
 
             val buffer = ShortArray(bufferSamples)
-            var capturedSamples = 0
-            while (!stopRequested.get() && capturedSamples < MAX_RECORDING_SAMPLES) {
-                val remainingSamples = MAX_RECORDING_SAMPLES - capturedSamples
-                val read = recorder.read(
-                    buffer,
-                    0,
-                    minOf(buffer.size, remainingSamples),
-                    AudioRecord.READ_BLOCKING,
-                )
+            while (!stopRequested.get()) {
+                val read = recorder.read(buffer, 0, buffer.size, AudioRecord.READ_BLOCKING)
                 when {
-                    read > 0 -> {
-                        onAudio(buffer.copyOf(read))
-                        capturedSamples += read
-                    }
+                    read > 0 -> onAudio(buffer.copyOf(read))
 
                     read < 0 && !stopRequested.get() -> {
                         throw IOException("AudioRecord.read failed: code=$read ${diagnostics(recorder, minBufferBytes)}")
@@ -130,7 +120,5 @@ class PcmAudioRecorder(
     private companion object {
         const val SAMPLE_RATE = 16_000
         const val SAMPLES_PER_CHUNK = SAMPLE_RATE / 10
-        const val MAX_RECORDING_MS = 30_000
-        const val MAX_RECORDING_SAMPLES = SAMPLE_RATE * MAX_RECORDING_MS / 1_000
     }
 }

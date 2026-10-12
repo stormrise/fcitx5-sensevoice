@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/settings_field_background" />
+    <item
+        android:width="20dp"
+        android:height="20dp"
+        android:gravity="center_vertical|end"
+        android:right="12dp"
+        android:drawable="@drawable/ic_expand_more" />
+</layer-list>

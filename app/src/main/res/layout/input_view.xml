@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="@color/voice_surface"
-             android:minHeight="312dp">
+             android:layout_height="@dimen/voice_panel_height"
+             android:background="@color/voice_surface">
 
     <ImageButton
             android:id="@+id/back"
@@ -29,14 +28,29 @@
             android:padding="12dp"
             android:src="@drawable/ic_backspace"/>
 
+    <!-- Same right edge as delete, stacked below it. -->
+    <ImageButton
+            android:id="@+id/enter"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="76dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/icon_button_background"
+            android:contentDescription="@string/send_or_enter"
+            android:padding="12dp"
+            android:src="@drawable/ic_enter"/>
+
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingStart="72dp"
-            android:paddingEnd="72dp">
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:paddingTop="56dp"
+            android:paddingBottom="16dp">
 
         <FrameLayout
                 android:layout_width="144dp"
@@ -58,24 +72,58 @@
                     android:contentDescription="@string/microphone_busy"
                     android:elevation="6dp"
                     android:padding="24dp"
-                    android:src="@drawable/ic_microphone"
-                    android:tint="@color/voice_mic_disabled_content"/>
+                    android:src="@drawable/ic_microphone"/>
         </FrameLayout>
 
         <TextView
                 android:id="@+id/status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="12dp"
+                android:accessibilityLiveRegion="polite"
                 android:ellipsize="end"
-                android:fontFamily="sans"
+                android:fontFamily="sans-medium"
                 android:gravity="center"
                 android:includeFontPadding="false"
-                android:lineSpacingExtra="2dp"
-                android:maxLines="2"
-                android:text="@string/status_model_initializing"
-                android:textColor="@color/voice_text_secondary"
-                android:textSize="15sp"/>
+                android:maxLines="1"
+                android:textColor="@color/voice_text_primary"
+                android:textSize="16sp"
+                android:text="@string/status_model_initializing"/>
+
+        <!-- Fixed-height detail slot: hint text and busy sheen share it, so the panel never resizes. -->
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:layout_marginTop="4dp">
+
+            <TextView
+                    android:id="@+id/status_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:fontFamily="sans"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/voice_text_secondary"
+                    android:textSize="13sp"/>
+
+            <FrameLayout
+                    android:id="@+id/loading_skeleton"
+                    android:layout_width="160dp"
+                    android:layout_height="6dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/skeleton_background"
+                    android:clipToOutline="true"
+                    android:visibility="gone">
+
+                <View
+                        android:id="@+id/loading_sheen"
+                        android:layout_width="64dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/skeleton_sheen"/>
+            </FrameLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </FrameLayout>
