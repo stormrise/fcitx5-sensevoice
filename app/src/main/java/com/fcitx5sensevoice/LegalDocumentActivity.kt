@@ -1,10 +1,10 @@
 package com.fcitx5sensevoice
 
-import android.content.Context
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 
 /**
  * Displays bundled legal and attribution documents from assets.
@@ -12,15 +12,13 @@ import androidx.activity.ComponentActivity
  * @author stormrise
  * @date 2026/09/29
  */
-class LegalDocumentActivity : ComponentActivity() {
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(wrapUiLocale(newBase))
-    }
-
+class LegalDocumentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Process-wide default: a fresh process starts in MODE_NIGHT_UNSPECIFIED, so every activity sets it.
+        AppCompatDelegate.setDefaultNightMode(AppSettings(this).loadUiTheme().appCompatMode)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_legal_document)
-        configureEdgeToEdge(findViewById(R.id.legal_content))
+        configureEdgeToEdge(findViewById(R.id.legal_scroll))
 
         val document = intent.getStringExtra(EXTRA_DOCUMENT) ?: DOCUMENT_PRIVACY
         val definition = LegalDocuments.byId(document)

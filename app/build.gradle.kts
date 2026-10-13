@@ -18,8 +18,8 @@ android {
         applicationId = "com.fcitx5sensevoice"
         minSdk = 28
         targetSdk = 36
-        versionCode = 7
-        versionName = "0.1.6"
+        versionCode = 8
+        versionName = "0.1.7"
 
         ndk {
             abiFilters += "arm64-v8a"
@@ -29,7 +29,6 @@ android {
     sourceSets.named("debug") {
         assets.directories.add(rootProject.file("sensevoice_models/src/main/assets").path)
     }
-
     assetPacks += listOf(":sensevoice_models")
 
     signingConfigs {
@@ -45,7 +44,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -75,6 +75,7 @@ kotlin {
 dependencies {
     implementation("com.github.k2-fsa.sherpa-onnx:sherpa-onnx:v1.13.8")
     implementation("androidx.activity:activity:1.13.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.google.android.material:material:1.14.0")
     testImplementation("junit:junit:4.13.2")
 }

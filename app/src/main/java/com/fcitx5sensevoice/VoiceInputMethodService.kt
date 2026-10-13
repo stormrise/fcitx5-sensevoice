@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
+import androidx.core.content.ContextCompat
 import android.widget.TextView
 import java.util.concurrent.Executors
 import java.util.concurrent.RejectedExecutionException
@@ -100,7 +101,7 @@ class VoiceInputMethodService : InputMethodService() {
 
     // The service's own resources are frozen at creation, so a language or theme change in Settings
     // never reaches them. Derive the UI context from the current preferences on every call.
-    private fun uiContext(): Context = wrapUiLocale(applicationContext)
+    private fun uiContext(): Context = wrapUiTheme(ContextCompat.getContextForLanguage(applicationContext))
 
     override fun onCreate() {
         super.onCreate()
@@ -129,7 +130,7 @@ class VoiceInputMethodService : InputMethodService() {
 
     // Rebuilding the panel would drop an in-progress recording, so defer language/night-mode switches until idle.
     private fun refreshInputViewIfUiChanged() {
-        val uiLanguage = AppSettings(this).loadUiLanguage()
+        val uiLanguage = currentUiLanguage(this)
         val nightMode = uiContext().resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         if (loadedUiLanguage == uiLanguage && loadedNightMode == nightMode) return
         if (recorder.state != AudioRecorderState.IDLE || recordingSessionActive) return

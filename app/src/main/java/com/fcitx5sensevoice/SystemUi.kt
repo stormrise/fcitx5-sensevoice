@@ -1,12 +1,14 @@
 package com.fcitx5sensevoice
 
 import android.os.Build
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import android.view.View
 import android.view.Window
-import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 data class PaddingValues(
     val left: Int,
@@ -15,30 +17,18 @@ data class PaddingValues(
     val bottom: Int,
 )
 
-fun WindowInsets.systemBarPadding(): PaddingValues {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        val types = WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout()
-        val insets = getInsets(types)
-        return PaddingValues(insets.left, insets.top, insets.right, insets.bottom)
-    }
-    @Suppress("DEPRECATION")
-    return PaddingValues(
-        systemWindowInsetLeft,
-        systemWindowInsetTop,
-        systemWindowInsetRight,
-        systemWindowInsetBottom,
-    )
-}
+// WindowInsetsCompat works from API 28 up and avoids the framework systemWindowInset* getters deprecated in API 30.
+private fun WindowInsetsCompat.barInsets(): Insets =
+    getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout())
 
 fun View.applySystemBarPadding(base: PaddingValues = viewPadding()) {
-    val initial = base
-    setOnApplyWindowInsetsListener { view, insets ->
-        val bars = insets.systemBarPadding()
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        val bars = insets.barInsets()
         view.setPadding(
-            initial.left + bars.left,
-            initial.top + bars.top,
-            initial.right + bars.right,
-            initial.bottom + bars.bottom,
+            base.left + bars.left,
+            base.top + bars.top,
+            base.right + bars.right,
+            base.bottom + bars.bottom,
         )
         insets
     }
@@ -46,8 +36,8 @@ fun View.applySystemBarPadding(base: PaddingValues = viewPadding()) {
 }
 
 fun View.applyImePanelInsets() {
-    setOnApplyWindowInsetsListener { view, insets ->
-        val bars = insets.systemBarPadding()
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, insets ->
+        val bars = insets.barInsets()
         view.setPadding(bars.left, 0, bars.right, bars.bottom)
         insets
     }

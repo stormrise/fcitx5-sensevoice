@@ -8,7 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
- * Keeps translated UI strings aligned with the default Chinese resources.
+ * Keeps translated UI strings aligned with the default English resources.
  *
  * @author stormrise
  * @date 2026/10/09
@@ -22,6 +22,13 @@ class LocaleResourcesTest {
             val translated = stringNames(root.resolve("app/src/main/res/values-$locale/strings.xml"))
             assertEquals("string names mismatch in values-$locale", defaultKeys, translated)
         }
+    }
+
+    @Test
+    fun defaultResourcesAreEnglish() {
+        // Unsupported system languages resolve to values/, so it must hold English text.
+        val text = readText(projectRoot().resolve("app/src/main/res/values/strings.xml"))
+        assertTrue(text.contains("<string name=\"settings_title\">Voice input settings</string>"))
     }
 
     @Test
@@ -93,7 +100,7 @@ class LocaleResourcesTest {
     }
 
     private companion object {
-        val LOCALES = listOf("en", "ja", "ko")
+        val LOCALES = listOf("zh", "ja", "ko")
         val UI_LANGUAGE_LABELS = listOf(
             "🌐 跟随系统 / System",
             "🇨🇳 中文",

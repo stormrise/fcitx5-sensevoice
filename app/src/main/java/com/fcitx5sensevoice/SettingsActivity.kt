@@ -1,15 +1,12 @@
 package com.fcitx5sensevoice
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.view.inputmethod.InputMethodManager
@@ -18,11 +15,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.materialswitch.MaterialSwitch
 
-class SettingsActivity : ComponentActivity() {
+class SettingsActivity : AppCompatActivity() {
     private val settingsStore by lazy { AppSettings(this) }
     private lateinit var uiLanguageSpinner: Spinner
     private lateinit var uiThemeSpinner: Spinner
@@ -41,18 +39,13 @@ class SettingsActivity : ComponentActivity() {
         ActivityResultContracts.RequestPermission(),
     ) { renderPermissionState() }
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(wrapUiLocale(newBase))
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Process-wide default: a fresh process starts in MODE_NIGHT_UNSPECIFIED, so every activity sets it.
+        AppCompatDelegate.setDefaultNightMode(settingsStore.loadUiTheme().appCompatMode)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        configureEdgeToEdge(findViewById(R.id.settings_content))
+        configureEdgeToEdge(findViewById(R.id.settings_scroll))
         bindViews()
-        // ponytail: TEMP locale diagnostics, remove once the switch is confirmed on device.
-        Log.i(TAG_LOCALE, "created sdk=${Build.VERSION.SDK_INT} saved=${settingsStore.loadUiLanguage()} " +
-            "config=${resources.configuration.locales} title=${getString(R.string.settings_title)}")
         populateSpinners()
         showSettings(settingsStore.load())
         findViewById<Button>(R.id.reset_defaults).setOnClickListener {
@@ -107,7 +100,7 @@ class SettingsActivity : ComponentActivity() {
         languageSpinner.setEntries(R.array.recognition_language_labels)
         vadSensitivitySpinner.setEntries(R.array.vad_sensitivity_labels)
         endpointSilenceSpinner.setEntries(R.array.endpoint_silence_labels)
-        uiLanguageSpinner.setSelection(UiLanguage.entries.indexOf(settingsStore.loadUiLanguage()))
+        uiLanguageSpinner.setSelection(UiLanguage.entries.indexOf(currentUiLanguage(this)))
         uiThemeSpinner.setSelection(UiTheme.entries.indexOf(settingsStore.loadUiTheme()))
         uiLanguageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -122,7 +115,7 @@ class SettingsActivity : ComponentActivity() {
         uiThemeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 applyUiPreferences(
-                    language = settingsStore.loadUiLanguage(),
+                    language = currentUiLanguage(this@SettingsActivity),
                     theme = UiTheme.entries[position.coerceIn(UiTheme.entries.indices)],
                 )
             }
@@ -157,12 +150,13 @@ class SettingsActivity : ComponentActivity() {
         ],
     )
 
+    // AppCompat recreates the activity itself when either the locales or the night mode change.
     private fun applyUiPreferences(language: UiLanguage, theme: UiTheme) {
-        Log.i(TAG_LOCALE, "apply $language $theme saved=${settingsStore.loadUiLanguage()}")
-        if (language == settingsStore.loadUiLanguage() && theme == settingsStore.loadUiTheme()) return
-        persistUiLanguage(this, language)
-        settingsStore.saveUiTheme(theme)
-        recreate()
+        if (language != currentUiLanguage(this)) AppCompatDelegate.setApplicationLocales(language.toLocaleList())
+        if (theme != settingsStore.loadUiTheme()) {
+            settingsStore.saveUiTheme(theme)
+            AppCompatDelegate.setDefaultNightMode(theme.appCompatMode)
+        }
     }
 
     private fun FloatArray.nearestIndex(value: Float): Int {
@@ -256,7 +250,6 @@ class SettingsActivity : ComponentActivity() {
     companion object {
         const val EXTRA_REQUEST_MICROPHONE_PERMISSION = "request_microphone_permission"
         private const val GITHUB_REPOSITORY_URL = "https://github.com/stormrise/fcitx5-sensevoice"
-        private const val TAG_LOCALE = "FcitxLocale"
         private val VAD_THRESHOLDS = floatArrayOf(0.15f, AsrSettings.DEFAULT_VAD_THRESHOLD, 0.4f)
         private val ENDPOINT_SILENCE_SECONDS =
             floatArrayOf(0.5f, AsrSettings.DEFAULT_VAD_MIN_SILENCE_SECONDS, 1f, 1.5f)

@@ -28,34 +28,37 @@ class LocaleSwitchTest {
     }
 
     @Test
-    fun wrapUiLocaleAppliesOnEveryApi() {
-        val body = kotlinFunction("app/src/main/java/com/fcitx5sensevoice/AppSettings.kt", "wrapUiLocale")
-        assertTrue(body.contains("createConfigurationContext"))
-        assertFalse(
-            "wrapUiLocale must not skip API 33+; LocaleManager does not refresh a framework Activity",
-            "SDK_INT" in body,
-        )
+    fun languageGoesThroughAppCompatOnly() {
+        // Framework LocaleManager does not refresh an Activity on Android 12 and lower; AppCompat covers 12+ too.
+        val sources = listOf("SettingsActivity.kt", "LegalDocumentActivity.kt", "AppSettings.kt", "VoiceInputMethodService.kt")
+            .map { readText(projectRoot().resolve("app/src/main/java/com/fcitx5sensevoice/$it")) }
+        sources.forEach { source ->
+            assertFalse("app must not use framework LocaleManager directly", "import android.app.LocaleManager" in source)
+            assertFalse("no hand-rolled attachBaseContext locale wrapping", "attachBaseContext" in source)
+        }
     }
 
     @Test
-    fun applyUiPreferencesAlwaysRecreates() {
+    fun applyUiPreferencesDelegatesToAppCompat() {
         val body = kotlinFunction("app/src/main/java/com/fcitx5sensevoice/SettingsActivity.kt", "applyUiPreferences")
-        assertTrue(body.contains("persistUiLanguage"))
-        assertTrue(body.contains("recreate()"))
-        assertFalse(
-            "recreate() must not be gated on SDK_INT; API 33+ still needs it",
-            "SDK_INT" in body,
-        )
+        assertTrue(body.contains("AppCompatDelegate.setApplicationLocales"))
+        assertTrue(body.contains("AppCompatDelegate.setDefaultNightMode"))
+        assertFalse("AppCompat recreates the activity; a manual recreate() would double it", "recreate()" in body)
     }
 
     @Test
-    fun activitiesWrapAttachBaseContext() {
+    fun manifestPersistsLocalesBelowApi33() {
+        // Without this service AppCompat forgets the per-app language after the process restarts on API 24-32.
+        val manifest = readText(projectRoot().resolve("app/src/main/AndroidManifest.xml"))
+        assertTrue(manifest.contains("androidx.appcompat.app.AppLocalesMetadataHolderService"))
+        assertTrue(manifest.contains("android:name=\"autoStoreLocales\""))
+    }
+
+    @Test
+    fun activitiesExtendAppCompatActivity() {
         listOf("SettingsActivity.kt", "LegalDocumentActivity.kt").forEach { file ->
             val source = readText(projectRoot().resolve("app/src/main/java/com/fcitx5sensevoice/$file"))
-            assertTrue(
-                "$file must wrap attachBaseContext with wrapUiLocale",
-                source.contains("super.attachBaseContext(wrapUiLocale(newBase))"),
-            )
+            assertTrue("$file must extend AppCompatActivity", source.contains(": AppCompatActivity()"))
         }
     }
 

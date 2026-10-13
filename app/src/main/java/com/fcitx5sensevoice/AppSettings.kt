@@ -1,10 +1,10 @@
 package com.fcitx5sensevoice
 
-import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
-import android.os.LocaleList
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.LocaleManagerCompat
+import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
 internal enum class UiLanguage(val code: String) {
@@ -27,41 +27,30 @@ internal enum class UiLanguage(val code: String) {
     }
 }
 
-internal fun persistUiLanguage(context: Context, language: UiLanguage) {
-    AppSettings(context).saveUiLanguage(language)
-    if (Build.VERSION.SDK_INT >= 33) {
-        val locales = language.localeOrNull()?.let { LocaleList(it) } ?: LocaleList.getEmptyLocaleList()
-        val appContext = context.applicationContext ?: context
-        appContext.getSystemService(LocaleManager::class.java).applicationLocales = locales
-    }
+// Per-app language is owned by AppCompat: framework LocaleManager on API 33+, its own storage below.
+internal fun UiLanguage.toLocaleList(): LocaleListCompat =
+    localeOrNull()?.let { LocaleListCompat.create(it) } ?: LocaleListCompat.getEmptyLocaleList()
+
+internal fun currentUiLanguage(context: Context): UiLanguage {
+    val locale = LocaleManagerCompat.getApplicationLocales(context).get(0) ?: return UiLanguage.SYSTEM
+    return UiLanguage.entries.firstOrNull { it.localeOrNull()?.language == locale.language } ?: UiLanguage.SYSTEM
 }
 
-internal enum class UiTheme(val code: String, val nightMode: Int?) {
-    SYSTEM("system", null),
-    LIGHT("light", Configuration.UI_MODE_NIGHT_NO),
-    DARK("dark", Configuration.UI_MODE_NIGHT_YES);
+internal enum class UiTheme(val code: String, val appCompatMode: Int, val nightMode: Int?) {
+    SYSTEM("system", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, null),
+    LIGHT("light", AppCompatDelegate.MODE_NIGHT_NO, Configuration.UI_MODE_NIGHT_NO),
+    DARK("dark", AppCompatDelegate.MODE_NIGHT_YES, Configuration.UI_MODE_NIGHT_YES);
 
     companion object {
         fun fromCode(code: String?): UiTheme = entries.firstOrNull { it.code == code } ?: SYSTEM
     }
 }
 
-// Applies both UI language and forced light/dark on top of the current configuration.
-// Activities and the IME resolve all resources through this context, so one override covers both.
-internal fun wrapUiLocale(context: Context): Context {
-    val settings = AppSettings(context)
-    val locale = settings.loadUiLanguage().localeOrNull()
-    val nightMode = settings.loadUiTheme().nightMode
-    if (locale == null && nightMode == null) return context
+// AppCompat handles forced night mode for activities; the IME has no delegate, so it overrides the config itself.
+internal fun wrapUiTheme(context: Context): Context {
+    val nightMode = AppSettings(context).loadUiTheme().nightMode ?: return context
     val config = Configuration(context.resources.configuration)
-    if (locale != null) {
-        Locale.setDefault(locale)
-        config.setLocales(LocaleList(locale))
-        config.setLayoutDirection(locale)
-    }
-    if (nightMode != null) {
-        config.uiMode = (config.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or nightMode
-    }
+    config.uiMode = (config.uiMode and Configuration.UI_MODE_NIGHT_MASK.inv()) or nightMode
     return context.createConfigurationContext(config)
 }
 
@@ -108,12 +97,6 @@ internal class AppSettings(context: Context) {
     private val preferences =
         (context.applicationContext ?: context).getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-    fun loadUiLanguage(): UiLanguage = UiLanguage.fromCode(preferences.getString(KEY_UI_LANGUAGE, UiLanguage.SYSTEM.code))
-
-    fun saveUiLanguage(language: UiLanguage) {
-        preferences.edit().putString(KEY_UI_LANGUAGE, language.code).commit()
-    }
-
     fun loadUiTheme(): UiTheme = UiTheme.fromCode(preferences.getString(KEY_UI_THEME, UiTheme.SYSTEM.code))
 
     fun saveUiTheme(theme: UiTheme) {
@@ -141,7 +124,6 @@ internal class AppSettings(context: Context) {
 
     private companion object {
         const val PREFERENCES_NAME = "voice_settings"
-        const val KEY_UI_LANGUAGE = "ui_language"
         const val KEY_UI_THEME = "ui_theme"
         const val KEY_LANGUAGE = "recognition_language"
         const val KEY_USE_ITN = "use_inverse_text_normalization"
