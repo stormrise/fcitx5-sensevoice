@@ -47,19 +47,19 @@ fun View.applyImePanelInsets() {
 fun View.viewPadding(): PaddingValues =
     PaddingValues(paddingLeft, paddingTop, paddingRight, paddingBottom)
 
-// enableEdgeToEdge() handles window flags and transparent system bars on every API level,
-// so the bars keep the page background instead of the theme default.
+// enableEdgeToEdge() is the AndroidX path that covers every API level, including the transparent bars.
+// Its bar-colour setters live inside androidx.activity and are not app code.
 fun ComponentActivity.configureEdgeToEdge(rootView: View) {
     enableEdgeToEdge()
     window.configureDisplayCutout()
     rootView.applySystemBarPadding(rootView.viewPadding())
 }
 
+// ALWAYS keeps content in the notch area in both orientations. SHORT_EDGES is deprecated in Android 15.
 fun Window.configureDisplayCutout() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         attributes = attributes.apply {
-            layoutInDisplayCutoutMode =
-                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
         }
     }
 }
